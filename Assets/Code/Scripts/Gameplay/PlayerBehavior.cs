@@ -12,17 +12,24 @@ namespace Unity.Ricochet.Gameplay
         public GameObject mousePointer, proyectilePrefab;
         public Animator animator;
 
+        [SerializeField] private GameCamera playerCamera;
+
         int hashSpeed;
         float attackTime = 0.4f;
         PlayerWeaponType currentWeapon = PlayerWeaponType.NULL;
-        Misc_Timer attackTimer = new Misc_Timer();
+        Timer attackTimer;
         private Damageable damageable;
+        
 
         // Use this for initialization
         void Awake()
         {
-
+            if (attackTimer == null)
+            {
+                attackTimer = gameObject.AddComponent<Timer>();
+            }
         }
+
         void Start()
         {
             damageable = GetComponent<Damageable>();
@@ -48,13 +55,13 @@ namespace Unity.Ricochet.Gameplay
             switch (currentWeapon)
             {
                 case PlayerWeaponType.KNIFE:
-                    if (Input.GetMouseButton(0) && attackTimer.IsFinished())
+                    if (Input.GetMouseButton(0) && attackTimer.isFinished)
                     {
                         Attack();
                     }
                     break;
                 case PlayerWeaponType.PISTOL:
-                    if (Input.GetMouseButtonDown(0) && attackTimer.IsFinished())
+                    if (Input.GetMouseButtonDown(0) && attackTimer.isFinished)
                     {
 
                         Attack();
@@ -66,7 +73,7 @@ namespace Unity.Ricochet.Gameplay
                 SetWeapon(PlayerWeaponType.KNIFE);
             if (Input.GetKeyDown(KeyCode.Alpha2))
                 SetWeapon(PlayerWeaponType.PISTOL);
-            attackTimer.UpdateTimer();
+            //attackTimer.UpdateTimer();
             UpdateAim();
         }
         public void DamagePlayer()
@@ -77,7 +84,7 @@ namespace Unity.Ricochet.Gameplay
             myRigidBody.isKinematic = true;
             GameManager.RegisterPlayerDeath();
             gameObject.GetComponent<Collider>().enabled = false;
-            GameCamera.ToggleShake(0.3f);
+            playerCamera.ToggleShake(0.3f);
             Vector3 pos = animator.transform.position;
             pos.y = 0.2f;
             animator.transform.position = pos;
@@ -102,7 +109,7 @@ namespace Unity.Ricochet.Gameplay
                     Invoke("DoHitTest", 0.2f);
                     break;
                 case PlayerWeaponType.PISTOL:
-                    GameCamera.ToggleShake(0.1f);
+                    playerCamera.ToggleShake(0.1f);
                     GameObject bullet = GameObject.Instantiate(proyectilePrefab, gunPivot.position, gunPivot.rotation) as GameObject;
                     bullet.transform.LookAt(mousePointer.transform);
                     bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);

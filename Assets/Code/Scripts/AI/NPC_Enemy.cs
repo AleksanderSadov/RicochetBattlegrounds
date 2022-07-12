@@ -132,11 +132,20 @@ namespace Unity.Ricochet.AI
         ///////////////////////////////////////////////////////// STATE: IDLE ROAMER
 
 
-        Misc_Timer idleTimer = new Misc_Timer();
-        Misc_Timer idleRotateTimer = new Misc_Timer();
+        Timer idleTimer;
+        Timer idleRotateTimer;
         bool idleWaiting, idleMoving;
         void StateInit_IdleRoamer()
         {
+            if (idleTimer == null)
+            {
+                idleTimer = gameObject.AddComponent<Timer>();
+            }
+            if (idleRotateTimer == null)
+            {
+                idleRotateTimer = gameObject.AddComponent<Timer>();
+            }
+
             navMeshAgent.speed = 7.0f;
 
             idleTimer.StartTimer(Random.Range(2.0f, 4.0f));
@@ -149,7 +158,7 @@ namespace Unity.Ricochet.AI
         void StateUpdate_IdleRoamer()
         {
 
-            idleTimer.UpdateTimer();
+            //idleTimer.UpdateTimer();
 
             if (idleMoving)
             {
@@ -161,15 +170,15 @@ namespace Unity.Ricochet.AI
             }
             else if (idleWaiting)
             {
-                idleRotateTimer.UpdateTimer();
-                if (idleRotateTimer.IsFinished())
+                //idleRotateTimer.UpdateTimer();
+                if (idleRotateTimer.isFinished)
                 {
                     RandomRotate();
                     idleRotateTimer.StartTimer(Random.Range(1.5f, 3.25f));
                 }
 
             }
-            if (idleTimer.IsFinished())
+            if (idleTimer.isFinished)
             {
                 if (idleMoving)
                 {
@@ -230,11 +239,20 @@ namespace Unity.Ricochet.AI
 
         }
         ///////////////////////////////////////////////////////// STATE: INSPECT
-        Misc_Timer inspectTimer = new Misc_Timer();
-        Misc_Timer inspectTurnTimer = new Misc_Timer();
+        Timer inspectTimer;
+        Timer inspectTurnTimer;
         bool inspectWait;
         void StateInit_Inspect()
         {
+            if (inspectTimer == null)
+            {
+                inspectTimer = gameObject.AddComponent<Timer>();
+            }
+            if (inspectTurnTimer == null)
+            {
+                inspectTurnTimer = gameObject.AddComponent<Timer>();
+            }
+
             navMeshAgent.speed = 16.0f;
             navMeshAgent.isStopped = false;
             inspectTimer.StopTimer();
@@ -260,14 +278,14 @@ namespace Unity.Ricochet.AI
             }
             if (inspectWait)
             {
-                inspectTimer.UpdateTimer();
-                inspectTurnTimer.UpdateTimer();
-                if (inspectTurnTimer.IsFinished())
+                //inspectTimer.UpdateTimer();
+                //inspectTurnTimer.UpdateTimer();
+                if (inspectTurnTimer.isFinished)
                 {
                     RandomRotate();
                     inspectTurnTimer.StartTimer(Random.Range(0.5f, 1.25f));
                 }
-                if (inspectTimer.IsFinished())
+                if (inspectTimer.isFinished)
                     SetState(idleState);
             }
         }
@@ -276,10 +294,15 @@ namespace Unity.Ricochet.AI
         }
 
         ///////////////////////////////////////////////////////// STATE: ATTACK
-        Misc_Timer attackActionTimer = new Misc_Timer();
+        Timer attackActionTimer;
         bool actionDone;
         void StateInit_Attack()
         {
+            if (attackActionTimer == null)
+            {
+                attackActionTimer = gameObject.AddComponent<Timer>();
+            }
+
             navMeshAgent.isStopped = true;
             navMeshAgent.velocity = Vector3.zero;
             npcAnimator.SetBool("Attack", true);
@@ -291,8 +314,8 @@ namespace Unity.Ricochet.AI
         }
         void StateUpdate_Attack()
         {
-            attackActionTimer.UpdateTimer();
-            if (!actionDone && attackActionTimer.IsFinished())
+            //attackActionTimer.UpdateTimer();
+            if (!actionDone && attackActionTimer.isFinished)
             {
                 EndAttack();
 

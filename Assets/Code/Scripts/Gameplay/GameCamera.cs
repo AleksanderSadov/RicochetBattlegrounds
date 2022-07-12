@@ -5,61 +5,57 @@ namespace Unity.Ricochet.Gameplay
 {
     public class GameCamera : MonoBehaviour
     {
-        public Transform trackedObject, trackedObjectZoom, targetCamera;
-        Vector3 offset;
-        static GameCamera myslf;
-        Misc_Timer shakeTimer = new Misc_Timer();
-        Transform currentTrackedObject;
-        void Awake()
-        {
-            myslf = this;
-        }
-        // Use this for initialization
-        void Start()
-        {
-            currentTrackedObject = trackedObject;
+        public Transform trackedObject;
+        public Transform targetCamera;
 
+        private float shakeDelay = 0.03f;
+        private float lastShakeTime = float.MinValue;
+        private Timer shakeTimer;
+
+        private void Awake()
+        {
+            InitTimers();
         }
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            //	offset = offsetObject.position - trackedObject.position;
-            targetCamera.position = Vector3.Lerp(targetCamera.position, currentTrackedObject.position, 0.05f) + offset;
-            shakeTimer.UpdateTimer();
-            if (shakeTimer.IsActive())
-                UpdateShake();
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            TrackObject();
+            HandleShake();
+        }
+
+        public void ToggleShake(float shakeTime)
+        {
+            shakeTimer.StartTimer(shakeTime);
+        }
+
+        private void InitTimers()
+        {
+            if (shakeTimer == null)
             {
-                currentTrackedObject = trackedObjectZoom;
-            }
-            if (Input.GetKeyUp(KeyCode.LeftShift))
-            {
-                currentTrackedObject = trackedObject;
+                shakeTimer = gameObject.AddComponent<Timer>();
             }
         }
-        float shakeDelay = 0.03f, lastShakeTime = float.MinValue;
-        void UpdateShake()
+
+        private void TrackObject()
         {
+            targetCamera.position = Vector3.Lerp(targetCamera.position, trackedObject.position, 0.05f);
+        }
+
+        private void HandleShake()
+        {
+            if (!shakeTimer.isActive)
+            {
+                return;
+            }
+
             if (lastShakeTime + shakeDelay < Time.time)
             {
                 Vector3 shakePosition = Vector3.zero;
                 shakePosition.x += Random.Range(-0.5f, 0.5f);
                 shakePosition.y += Random.Range(-0.5f, 0.5f);
                 targetCamera.transform.Translate(shakePosition);
-                //targetCamera.transform.localPosition = shakePosition+targetCamera.transform.localPosition;
                 lastShakeTime = Time.time;
             }
-        }
-        //Vector3 camLocalPos;
-        //bool shakeActive;
-        public static void ToggleShake(float shakeTime)
-        {
-            myslf.shakeTimer.StartTimer(shakeTime);
-            //	myslf.shakeActive = toggleValue;
-            //if (!toggleValue) {
-            //	myslf.targetCamera.transform.localPosition=myslf.camLocalPos;
-            //}
         }
     }
 }
