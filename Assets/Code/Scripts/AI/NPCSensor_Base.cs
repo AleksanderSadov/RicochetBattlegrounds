@@ -8,30 +8,32 @@ public struct NPCSensor_Condition{
 	public NPC_Condition condition;
 	public bool value;
 }*/
-public class NPCSensor_Base : MonoBehaviour
+
+namespace Unity.Ricochet.AI
 {
-    public NPC_Enemy npcBase;
-    //	public List<NPCSensor_Condition> appliedConditons;
-    protected List<GameObject> sensedObjects = new List<GameObject>();
-
-    void Start()
+    public class NPCSensor_Base : MonoBehaviour
     {
-        if (npcBase == null)
-            npcBase = gameObject.GetComponent<NPC_Enemy>();
-        StartSensor();
-    }
+        public NPC_Enemy npcBase;
+        //	public List<NPCSensor_Condition> appliedConditons;
+        protected List<GameObject> sensedObjects = new List<GameObject>();
 
-    void Update()
-    {
-        UpdateSensor();
-    }
-    protected virtual void StartSensor() { }
-    protected virtual void UpdateSensor() { }
+        void Start()
+        {
+            if (npcBase == null)
+                npcBase = gameObject.GetComponent<NPC_Enemy>();
+            StartSensor();
+        }
 
-    protected List<GameObject> GetSensedObjects()
-    {
-        return sensedObjects;
-    }
+        void Update()
+        {
+            UpdateSensor();
+        }
+        protected virtual void StartSensor() { }
+        protected virtual void UpdateSensor() { }
 
+        protected List<GameObject> GetSensedObjects()
+        {
+            return sensedObjects;
+        }
+    }
 }
-

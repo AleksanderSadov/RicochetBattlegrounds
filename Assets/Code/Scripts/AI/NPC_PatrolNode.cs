@@ -1,36 +1,39 @@
 ﻿using UnityEngine;
 
-public class NPC_PatrolNode : MonoBehaviour
+namespace Unity.Ricochet.AI
 {
-    public NPC_PatrolNode nextNode;
-    /*	public override void DefineNode(){
-
-        }
-        public override void OnNPCEnter ()
-        {
-
-        }
-        public override void OnNPCExit ()
-        {
-
-        }*/
-    public Vector3 GetNextNodePosition()
+    public class NPC_PatrolNode : MonoBehaviour
     {
-        return nextNode.GetPosition();
-    }
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(transform.position, 0.25f);
-        if (nextNode != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(GetPosition(), GetNextNodePosition());
-        }
-    }
-    public Vector3 GetPosition()
-    {
-        return transform.position;
-    }
+        public NPC_PatrolNode nextNode;
+        /*	public override void DefineNode(){
 
+            }
+            public override void OnNPCEnter ()
+            {
+
+            }
+            public override void OnNPCExit ()
+            {
+
+            }*/
+        public Vector3 GetNextNodePosition()
+        {
+            return nextNode.GetPosition();
+        }
+        void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(transform.position, 0.25f);
+            if (nextNode != null)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(GetPosition(), GetNextNodePosition());
+            }
+        }
+        public Vector3 GetPosition()
+        {
+            return transform.position;
+        }
+
+    }
 }
