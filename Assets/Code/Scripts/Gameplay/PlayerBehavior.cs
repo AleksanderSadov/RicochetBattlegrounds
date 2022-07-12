@@ -1,28 +1,53 @@
 ﻿using Unity.Ricochet.AI;
 using Unity.Ricochet.Game;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Unity.Ricochet.Gameplay
 {
+    public enum PlayerWeaponType { KNIFE, PISTOL, NULL }
+
     public class PlayerBehavior : MonoBehaviour
     {
-        Rigidbody myRigidBody;
         public float moveSpeed = 10.0f;
-        public Transform hitTestPivot, gunPivot;
-        public GameObject mousePointer, proyectilePrefab;
+        public Transform knifePivot, gunPivot;
+        public GameObject mousePointer, projectilePrefab;
         public Animator animator;
+        public UnityAction<PlayerWeaponType> OnWeaponChanged;
 
         [SerializeField] private GameCamera playerCamera;
 
-        int hashSpeed;
-        float attackTime = 0.4f;
-        PlayerWeaponType currentWeapon = PlayerWeaponType.NULL;
-        Timer attackTimer;
+        private Rigidbody myRigidBody;
+        private int hashSpeed;
+        private float attackTime = 0.4f;
+        private PlayerWeaponType currentWeapon = PlayerWeaponType.NULL;
+        private Timer attackTimer;
         private Damageable damageable;
         
+        private void Awake()
+        {
+            InitTimers();
+        }
 
-        // Use this for initialization
-        void Awake()
+        private void Start()
+        {
+            damageable = GetComponent<Damageable>();
+            damageable.OnDie += OnDie;
+            myRigidBody = GetComponent<Rigidbody>();
+            hashSpeed = Animator.StringToHash("Speed");
+            attackTimer.StartTimer(0.1f);
+            SetWeapon(PlayerWeaponType.PISTOL);
+        }
+
+        private void Update()
+        {
+            HideCursor();
+            SetAnimatorSpeed();
+            HandleInput();
+            HandleAim();
+        }
+
+        private void InitTimers()
         {
             if (attackTimer == null)
             {
@@ -30,69 +55,94 @@ namespace Unity.Ricochet.Gameplay
             }
         }
 
-        void Start()
+        private void HideCursor()
         {
-            damageable = GetComponent<Damageable>();
-            damageable.OnDie += DamagePlayer;
-            myRigidBody = GetComponent<Rigidbody>();
-            SetWeapon(PlayerWeaponType.PISTOL);
-            hashSpeed = Animator.StringToHash("Speed");
-            attackTimer.StartTimer(0.1f);
-
-            //	Cursor.visible = false;
+            if (Cursor.visible)
+            {
+                Cursor.visible = false;
+            }
         }
 
-        // Update is called once per frame
-        void Update()
+        private void SetAnimatorSpeed()
         {
             animator.SetFloat(hashSpeed, myRigidBody.velocity.magnitude);
+        }
+
+        private void HandleInput()
+        {
+            HandleMovement();
+            HandleWeaponSelection();
+            HandleAttack();
+        }
+
+        private void HandleMovement()
+        {
             float inputHorizontal = Input.GetAxis("Horizontal");
             float inputVertical = Input.GetAxis("Vertical");
-            //	float speedY = inputVertical > 0.1 ? Mathf.Clamp ((inputVertical * moveSpeed), moveSpeed / 2.0f, moveSpeed) : 0.0f;
-            //float speedX = inputHorizontal > 0.1 ? Mathf.Clamp ((inputHorizontal * moveSpeed), moveSpeed / 2.0f, moveSpeed) : 0.0f;
             Vector3 newVelocity = new Vector3(inputVertical * moveSpeed, 0.0f, inputHorizontal * -moveSpeed);
             myRigidBody.velocity = newVelocity;
+        }
+
+        private void HandleAttack()
+        {
+            if (currentWeapon == PlayerWeaponType.NULL)
+            {
+                return;
+            }
+
+            if (Input.GetMouseButtonDown(0) && attackTimer.isFinished)
+            {
+                Attack();
+            }
+        }
+
+        private void HandleWeaponSelection()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                SetWeapon(PlayerWeaponType.KNIFE);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                SetWeapon(PlayerWeaponType.PISTOL);
+            }
+        }
+
+        private void Attack()
+        {
             switch (currentWeapon)
             {
                 case PlayerWeaponType.KNIFE:
-                    if (Input.GetMouseButton(0) && attackTimer.isFinished)
-                    {
-                        Attack();
-                    }
+                    Invoke("KnifeHitCheck", 0.2f);
                     break;
                 case PlayerWeaponType.PISTOL:
-                    if (Input.GetMouseButtonDown(0) && attackTimer.isFinished)
-                    {
-
-                        Attack();
-                    }
+                    playerCamera.ToggleShake(0.1f);
+                    GameObject bullet = Instantiate(projectilePrefab, gunPivot.position, gunPivot.rotation);
+                    bullet.transform.LookAt(mousePointer.transform);
+                    bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
+                    AlertEnemies();
                     break;
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-                SetWeapon(PlayerWeaponType.KNIFE);
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-                SetWeapon(PlayerWeaponType.PISTOL);
-            //attackTimer.UpdateTimer();
-            UpdateAim();
+            animator.SetBool("Attack", true);
+            CancelInvoke("AttackOver");
+            Invoke("AttackOver", attackTime);
+            attackTimer.StartTimer(attackTime);
         }
-        public void DamagePlayer()
+
+        private void OnDie()
         {
             animator.SetBool("Dead", true);
             animator.transform.parent = null;
-            this.enabled = false;
+            enabled = false;
             myRigidBody.isKinematic = true;
             GameManager.RegisterPlayerDeath();
             gameObject.GetComponent<Collider>().enabled = false;
             playerCamera.ToggleShake(0.3f);
-            Vector3 pos = animator.transform.position;
-            pos.y = 0.2f;
-            animator.transform.position = pos;
         }
-        void UpdateAim()
+
+        private void HandleAim()
         {
-
-
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePos.y = transform.position.y;
             mousePointer.transform.position = mousePos;
@@ -101,30 +151,10 @@ namespace Unity.Ricochet.Gameplay
             float angleInDegrees = Mathf.Atan2(deltaY, deltaX) * 180 / Mathf.PI;
             transform.eulerAngles = new Vector3(0, -angleInDegrees, 0);
         }
-        public void Attack()
-        {
-            switch (currentWeapon)
-            {
-                case PlayerWeaponType.KNIFE:
-                    Invoke("DoHitTest", 0.2f);
-                    break;
-                case PlayerWeaponType.PISTOL:
-                    playerCamera.ToggleShake(0.1f);
-                    GameObject bullet = GameObject.Instantiate(proyectilePrefab, gunPivot.position, gunPivot.rotation) as GameObject;
-                    bullet.transform.LookAt(mousePointer.transform);
-                    bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
-                    AlertEnemies();
-                    break;
-            }
-            animator.SetBool("Attack", true);
-            CancelInvoke("AttackOver");
-            Invoke("AttackOver", attackTime);
-            attackTimer.StartTimer(attackTime);
 
-        }
-        void AlertEnemies()
+        private void AlertEnemies()
         {
-            RaycastHit[] hits = Physics.SphereCastAll(hitTestPivot.position, 20.0f, hitTestPivot.up);
+            RaycastHit[] hits = Physics.SphereCastAll(knifePivot.position, 20.0f, knifePivot.up);
             foreach (RaycastHit hit in hits)
             {
                 if (hit.collider != null && hit.collider.tag == "Enemy")
@@ -133,32 +163,30 @@ namespace Unity.Ricochet.Gameplay
                 }
             }
         }
-        public void DoHitTest()
+
+        private void KnifeHitCheck()
         {
-
-
-
-
-            RaycastHit[] hits = Physics.SphereCastAll(hitTestPivot.position, 2.0f, hitTestPivot.up);
+            RaycastHit[] hits = Physics.SphereCastAll(knifePivot.position, 2.0f, knifePivot.up);
             foreach (RaycastHit hit in hits)
             {
                 if (hit.collider != null && hit.collider.tag == "Enemy")
                 {
                     RaycastHit forwarHit = new RaycastHit();
-                    Physics.Raycast(hitTestPivot.position, hit.transform.position - transform.position, out forwarHit);
+                    Physics.Raycast(knifePivot.position, hit.transform.position - transform.position, out forwarHit);
                     if (forwarHit.collider != null && forwarHit.collider.tag == "Enemy")
                     {
-                        forwarHit.collider.GetComponent<NPC_Enemy>().Damage();
+                        forwarHit.collider.GetComponent<Damageable>().Kill();
                     }
                 }
             }
         }
-        void AttackOver()
+
+        private void AttackOver()
         {
             animator.SetBool("Attack", false);
         }
 
-        void SetWeapon(PlayerWeaponType weaponType)
+        private void SetWeapon(PlayerWeaponType weaponType)
         {
             if (weaponType != currentWeapon)
             {
@@ -175,8 +203,9 @@ namespace Unity.Ricochet.Gameplay
                         animator.SetInteger("WeaponType", 3);
                         break;
                 }
+
+                OnWeaponChanged.Invoke(weaponType);
             }
-            GameManager.SelectWeapon(weaponType);
         }
     }
 }

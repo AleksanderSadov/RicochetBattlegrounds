@@ -28,10 +28,15 @@ namespace Unity.Ricochet.AI
         float weaponActionTime, weaponTime;
         int hashSpeed;
         public NPC_PatrolNode patrolNode;
+        private Damageable damageable;
+        private ScoreManager scoreManager;
         // Use this for initialization
 
         void Start()
         {
+            scoreManager = FindObjectOfType<ScoreManager>();
+            damageable = GetComponent<Damageable>();
+            damageable.OnDie += OnDie;
             startingPos = transform.position;
             hashSpeed = Animator.StringToHash("Speed");
             SetWeapon(weaponType);
@@ -404,12 +409,12 @@ namespace Unity.Ricochet.AI
                 SetState(NPC_EnemyState.INSPECT);
             }
         }
-        public void Damage()
+        public void OnDie()
         {
             navMeshAgent.velocity = Vector3.zero;
             //navMeshAgent.Stop ();
             npcAnimator.SetBool("Dead", true);
-            GameManager.AddScore(100);
+            scoreManager.AddScore(100);
             npcAnimator.transform.parent = null;
             Vector3 pos = npcAnimator.transform.position;
             pos.y = 0.2f;

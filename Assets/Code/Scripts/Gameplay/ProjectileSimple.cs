@@ -1,9 +1,10 @@
 ﻿using Unity.Ricochet.AI;
+using Unity.Ricochet.Game;
 using UnityEngine;
 
 namespace Unity.Ricochet.Gameplay
 {
-    public class Proyectile_Simple : MonoBehaviour
+    public class ProjectileSimple : MonoBehaviour
     {
         public enum CollisionTarget { PLAYER, ENEMIES }
         public CollisionTarget collisionTarget;
@@ -33,12 +34,12 @@ namespace Unity.Ricochet.Gameplay
         {
             if (collisionTarget == CollisionTarget.PLAYER && collision.gameObject.tag == "Player")
             {
-                collision.gameObject.GetComponent<PlayerBehavior>().DamagePlayer();
+                collision.gameObject.GetComponent<Damageable>().Kill();
 
             }
             else if (collisionTarget == CollisionTarget.ENEMIES && collision.gameObject.tag == "Enemy")
             {
-                collision.gameObject.GetComponent<NPC_Enemy>().Damage();
+                collision.gameObject.GetComponent<Damageable>().Kill();
             }
             else if (collision.gameObject.tag == "Finish")
             { //This is to detect if the proyectile collides with the world, i used this tag because it is standard in Unity (To prevent asset importing issues)

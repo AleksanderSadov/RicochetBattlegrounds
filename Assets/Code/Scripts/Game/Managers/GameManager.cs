@@ -1,16 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Unity.Ricochet.Game
 {
-    public enum PlayerWeaponType { KNIFE, PISTOL, NULL }
-
     public class GameManager : MonoBehaviour
     {
-        public Text scoreText, scoreTextBG;
-        public GameObject restartMessage, knifeSelector, gunSelector, endSection;
-        int currentScore = 0;
+        public GameObject restartMessage, endSection;
         static GameManager myslf;
         public bool gameOver = false;
         int enemyCount;
@@ -34,15 +29,7 @@ namespace Unity.Ricochet.Game
             }
 
         }
-        public static void AddScore(int pointsAdded)
-        {
-            myslf.currentScore += pointsAdded;
-            myslf.scoreText.text = myslf.currentScore.ToString();
-            myslf.scoreTextBG.text = myslf.currentScore.ToString();
-            myslf.scoreText.transform.localScale = Vector3.one * 2.5f;
-            iTween.Stop(myslf.scoreText.gameObject);
-            iTween.ScaleTo(myslf.scoreText.gameObject, iTween.Hash("scale", Vector3.one, "time", 0.25f, "delay", 0.1f, "easetype", iTween.EaseType.spring));
-        }
+
         public static void RegisterPlayerDeath()
         {
             myslf.restartMessage.SetActive(true);
@@ -50,21 +37,6 @@ namespace Unity.Ricochet.Game
             iTween.Stop(myslf.restartMessage.gameObject);
             iTween.ScaleTo(myslf.restartMessage, iTween.Hash("scale", Vector3.one, "time", 0.5f, "delay", 0.1f, "easetype", iTween.EaseType.spring));
             myslf.gameOver = true;
-        }
-        public static void SelectWeapon(PlayerWeaponType weaponType)
-        {
-            switch (weaponType)
-            {
-                case PlayerWeaponType.KNIFE:
-                    myslf.knifeSelector.SetActive(true);
-                    myslf.gunSelector.SetActive(false);
-                    break;
-                case PlayerWeaponType.PISTOL:
-                    myslf.knifeSelector.SetActive(false);
-                    myslf.gunSelector.SetActive(true);
-                    break;
-            }
-
         }
         public static void AddToEnemyCount()
         {
