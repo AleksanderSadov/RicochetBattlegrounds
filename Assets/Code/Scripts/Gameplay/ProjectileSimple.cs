@@ -1,63 +1,31 @@
-﻿using Unity.Ricochet.AI;
-using Unity.Ricochet.Game;
+﻿using Unity.Ricochet.Game;
 using UnityEngine;
 
 namespace Unity.Ricochet.Gameplay
 {
     public class ProjectileSimple : MonoBehaviour
     {
-        public enum CollisionTarget { PLAYER, ENEMIES }
-        public CollisionTarget collisionTarget;
         public float lifeTime = 3.0f;
         public float speed = 1.5f;
 
-        bool hitTest = true;
-        bool moving;
-        void Start()
+        private void Start()
         {
-
-            moving = true;
             Destroy(gameObject, lifeTime);
         }
 
-
-        void Update()
+        private void Update()
         {
-
-            if (moving)
-                transform.Translate(transform.forward * speed, Space.World);
-
-
-
+            transform.Translate(transform.forward * speed, Space.World);
         }
-        void OnCollisionEnter(Collision collision)
-        {
-            if (collisionTarget == CollisionTarget.PLAYER && collision.gameObject.tag == "Player")
-            {
-                collision.gameObject.GetComponent<Damageable>().Kill();
 
-            }
-            else if (collisionTarget == CollisionTarget.ENEMIES && collision.gameObject.tag == "Enemy")
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy"))
             {
                 collision.gameObject.GetComponent<Damageable>().Kill();
             }
-            else if (collision.gameObject.tag == "Finish")
-            { //This is to detect if the proyectile collides with the world, i used this tag because it is standard in Unity (To prevent asset importing issues)
-                DestroyProyectile();
-            }
 
-
-
-        }
-        void DestroyProyectile()
-        {
-
-            /*hitTest=false;
-            gameObject.GetComponent<Rigidbody> ().isKinematic = true;
-            gameObject.GetComponent<Collider> ().enabled = false;
-            moving = false;*/
             Destroy(gameObject);
         }
-
     }
 }
