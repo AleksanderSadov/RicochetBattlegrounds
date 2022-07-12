@@ -1,0 +1,17 @@
+{
+    "name": "Ricochet.Gameplay",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7c704337610286043980cbb2f181ffad",
+        "GUID:ab061f7572a95e640adb1293b48a36e6"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

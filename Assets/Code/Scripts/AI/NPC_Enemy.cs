@@ -1,5 +1,4 @@
 ﻿using Unity.Ricochet.Game;
-using Unity.Ricochet.Gameplay;
 using UnityEngine;
 public enum NPC_EnemyState { IDLE_STATIC, IDLE_ROAMER, IDLE_PATROL, INSPECT, ATTACK, FIND_WEAPON, KNOCKED_OUT, DEAD, NONE }
 public enum NPC_WeaponType { KNIFE, RIFLE, SHOTGUN }
@@ -318,7 +317,7 @@ namespace Unity.Ricochet.AI
                     {
                         if (hit.collider != null && hit.collider.tag == "Player")
                         {
-                            hit.collider.GetComponent<PlayerBehavior>().DamagePlayer();
+                            hit.collider.GetComponent<Damageable>().Kill();
                         }
                     }
                     break;

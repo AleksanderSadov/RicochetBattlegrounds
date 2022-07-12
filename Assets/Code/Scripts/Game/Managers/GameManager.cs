@@ -1,10 +1,11 @@
-﻿using Unity.Ricochet.Gameplay;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Unity.Ricochet.Game
 {
+    public enum PlayerWeaponType { KNIFE, PISTOL, NULL }
+
     public class GameManager : MonoBehaviour
     {
         public Text scoreText, scoreTextBG;

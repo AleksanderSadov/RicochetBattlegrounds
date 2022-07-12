@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Unity.Ricochet.Gameplay
 {
-    public enum PlayerWeaponType { KNIFE, PISTOL, NULL }
     public class PlayerBehavior : MonoBehaviour
     {
         Rigidbody myRigidBody;
@@ -12,10 +11,13 @@ namespace Unity.Ricochet.Gameplay
         public Transform hitTestPivot, gunPivot;
         public GameObject mousePointer, proyectilePrefab;
         public Animator animator;
+
         int hashSpeed;
         float attackTime = 0.4f;
         PlayerWeaponType currentWeapon = PlayerWeaponType.NULL;
         Misc_Timer attackTimer = new Misc_Timer();
+        private Damageable damageable;
+
         // Use this for initialization
         void Awake()
         {
@@ -23,8 +25,10 @@ namespace Unity.Ricochet.Gameplay
         }
         void Start()
         {
-            SetWeapon(PlayerWeaponType.PISTOL);
+            damageable = GetComponent<Damageable>();
+            damageable.OnDie += DamagePlayer;
             myRigidBody = GetComponent<Rigidbody>();
+            SetWeapon(PlayerWeaponType.PISTOL);
             hashSpeed = Animator.StringToHash("Speed");
             attackTimer.StartTimer(0.1f);
 
