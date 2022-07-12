@@ -29,11 +29,13 @@ namespace Unity.Ricochet.AI
         int hashSpeed;
         public NPC_PatrolNode patrolNode;
         private Damageable damageable;
+        private EnemyManager enemyManager;
         private ScoreManager scoreManager;
         // Use this for initialization
 
         void Start()
         {
+            enemyManager = FindObjectOfType<EnemyManager>();
             scoreManager = FindObjectOfType<ScoreManager>();
             damageable = GetComponent<Damageable>();
             damageable.OnDie += OnDie;
@@ -41,7 +43,7 @@ namespace Unity.Ricochet.AI
             hashSpeed = Animator.StringToHash("Speed");
             SetWeapon(weaponType);
             SetState(idleState);
-            GameManager.AddToEnemyCount();
+            enemyManager.EnemySpawned();
         }
         void SetWeapon(NPC_WeaponType newWeapon)
         {
@@ -419,7 +421,7 @@ namespace Unity.Ricochet.AI
             Vector3 pos = npcAnimator.transform.position;
             pos.y = 0.2f;
             npcAnimator.transform.position = pos;
-            GameManager.RemoveEnemy();
+            enemyManager.EnemyDied();
             Destroy(gameObject);
         }
 

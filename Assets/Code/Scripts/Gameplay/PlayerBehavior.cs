@@ -136,9 +136,9 @@ namespace Unity.Ricochet.Gameplay
             animator.transform.parent = null;
             enabled = false;
             myRigidBody.isKinematic = true;
-            GameManager.RegisterPlayerDeath();
             gameObject.GetComponent<Collider>().enabled = false;
             playerCamera.ToggleShake(0.3f);
+            EventManager.Broadcast(new PlayerDeathEvent());
         }
 
         private void HandleAim()

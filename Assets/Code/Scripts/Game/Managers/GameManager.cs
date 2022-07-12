@@ -5,51 +5,38 @@ namespace Unity.Ricochet.Game
 {
     public class GameManager : MonoBehaviour
     {
-        public GameObject restartMessage, endSection;
-        static GameManager myslf;
-        public bool gameOver = false;
-        int enemyCount;
-        void Awake()
-        {
-            myslf = this;
+        public GameObject endSection;
+        public bool isGameOver = false;
 
-        }
-        // Use this for initialization
-        void Start()
+        private void Start()
         {
-
+            EventManager.AddListener<PlayerDeathEvent>(OnPlayerDeath);
+            EventManager.AddListener<AllEnemiesKilled>(OnAllEnemiesKilled);
         }
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            if (gameOver && Input.GetKeyDown(KeyCode.R))
+            if (isGameOver && Input.GetKeyDown(KeyCode.R))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
-
         }
 
-        public static void RegisterPlayerDeath()
+        private void OnPlayerDeath(PlayerDeathEvent evt)
         {
-            myslf.restartMessage.SetActive(true);
-            myslf.restartMessage.transform.localScale = Vector3.one * 2.0f;
-            iTween.Stop(myslf.restartMessage.gameObject);
-            iTween.ScaleTo(myslf.restartMessage, iTween.Hash("scale", Vector3.one, "time", 0.5f, "delay", 0.1f, "easetype", iTween.EaseType.spring));
-            myslf.gameOver = true;
+            isGameOver = true;
+            EventManager.Broadcast(new GameOverEvent());
         }
-        public static void AddToEnemyCount()
-        {
-            myslf.enemyCount++;
-        }
-        public static void RemoveEnemy()
-        {
-            myslf.enemyCount--;
-            if (myslf.enemyCount <= 0)
-            {
-                myslf.endSection.SetActive(true);
-            }
 
+        private void OnAllEnemiesKilled(AllEnemiesKilled evt)
+        {
+            endSection.SetActive(true);
+        }
+
+        private void OnDestroy()
+        {
+            EventManager.RemoveListener<PlayerDeathEvent>(OnPlayerDeath);
+            EventManager.RemoveListener<AllEnemiesKilled>(OnAllEnemiesKilled);
         }
     }
 }
