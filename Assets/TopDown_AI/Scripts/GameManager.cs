@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 public class GameManager : MonoBehaviour {
 	public Text scoreText,scoreTextBG;
 	public GameObject restartMessage,knifeSelector,gunSelector,endSection;
@@ -20,7 +22,7 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (gameOver && Input.GetKeyDown(KeyCode.R)) {
-			Application.LoadLevel(Application.loadedLevel);
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		}
 
 	}
