@@ -159,7 +159,7 @@ namespace Unity.Ricochet.Gameplay
             {
                 if (hit.collider != null && hit.collider.tag == "Enemy")
                 {
-                    hit.collider.GetComponent<Enemy>().SetAlertPos(transform.position);
+                    hit.collider.GetComponent<Enemy>().SetAlertPosition(transform.position);
                 }
             }
         }

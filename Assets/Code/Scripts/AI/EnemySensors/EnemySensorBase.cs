@@ -1,26 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-/// <summary>
-/// Sensors change a NPC_Base status condition
-/// </summary>
-/*[System.Serializable]
-public struct NPCSensor_Condition{
-	public NPC_Condition condition;
-	public bool value;
-}*/
 
 namespace Unity.Ricochet.AI
 {
-    public class NPCSensor_Base : MonoBehaviour
+    public class EnemySensorBase : MonoBehaviour
     {
-        public Enemy npcBase;
-        //	public List<NPCSensor_Condition> appliedConditons;
+        public Enemy enemy;
         protected List<GameObject> sensedObjects = new List<GameObject>();
 
-        void Start()
+        private void Start()
         {
-            if (npcBase == null)
-                npcBase = gameObject.GetComponent<Enemy>();
+            if (enemy == null)
+            {
+                enemy = gameObject.GetComponent<Enemy>();
+            }
+
             StartSensor();
         }
 
@@ -28,6 +22,7 @@ namespace Unity.Ricochet.AI
         {
             UpdateSensor();
         }
+
         protected virtual void StartSensor() { }
         protected virtual void UpdateSensor() { }
 

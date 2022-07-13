@@ -110,14 +110,15 @@ namespace Unity.Ricochet.AI
             }
         }
 
-        ////////////////////////// PUBLIC FUNCTIONS //////////////////////////
-        public void SetAlertPos(Vector3 newPos)
+
+        public void SetAlertPosition(Vector3 newPosition)
         {
             if (idleState != EnemyStateType.IDLE_STATIC)
             {
-                SetTargetPos(newPos);
+                SetTargetPos(newPosition);
             }
         }
+
         public void SetTargetPos(Vector3 newPos)
         {
             targetPosition = newPos;
@@ -126,19 +127,16 @@ namespace Unity.Ricochet.AI
                 SetState(EnemyStateType.INSPECT);
             }
         }
-        public void OnDie()
+
+        private void OnDie()
         {
             navMeshAgent.velocity = Vector3.zero;
-            //navMeshAgent.Stop ();
+            navMeshAgent.isStopped = true;
             animator.SetBool("Dead", true);
-            scoreManager.AddScore(100);
             animator.transform.parent = null;
-            Vector3 pos = animator.transform.position;
-            pos.y = 0.2f;
-            animator.transform.position = pos;
+            scoreManager.AddScore(100);
             enemyManager.EnemyDied();
             Destroy(gameObject);
         }
-
     }
 }
