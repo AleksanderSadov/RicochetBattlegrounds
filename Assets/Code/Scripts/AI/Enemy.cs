@@ -110,7 +110,6 @@ namespace Unity.Ricochet.AI
             }
         }
 
-
         public void SetAlertPosition(Vector3 newPosition)
         {
             if (idleState != EnemyStateType.IDLE_STATIC)
