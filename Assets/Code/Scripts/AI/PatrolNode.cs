@@ -2,24 +2,15 @@
 
 namespace Unity.Ricochet.AI
 {
-    public class NPC_PatrolNode : MonoBehaviour
+    public class PatrolNode : MonoBehaviour
     {
-        public NPC_PatrolNode nextNode;
-        /*	public override void DefineNode(){
+        public PatrolNode nextNode;
 
-            }
-            public override void OnNPCEnter ()
-            {
-
-            }
-            public override void OnNPCExit ()
-            {
-
-            }*/
         public Vector3 GetNextNodePosition()
         {
             return nextNode.GetPosition();
         }
+
         void OnDrawGizmos()
         {
             Gizmos.color = Color.yellow;
@@ -30,10 +21,10 @@ namespace Unity.Ricochet.AI
                 Gizmos.DrawLine(GetPosition(), GetNextNodePosition());
             }
         }
+
         public Vector3 GetPosition()
         {
             return transform.position;
         }
-
     }
 }

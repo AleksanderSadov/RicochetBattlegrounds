@@ -13,14 +13,14 @@ namespace Unity.Ricochet.AI
 {
     public class NPCSensor_Base : MonoBehaviour
     {
-        public NPC_Enemy npcBase;
+        public Enemy npcBase;
         //	public List<NPCSensor_Condition> appliedConditons;
         protected List<GameObject> sensedObjects = new List<GameObject>();
 
         void Start()
         {
             if (npcBase == null)
-                npcBase = gameObject.GetComponent<NPC_Enemy>();
+                npcBase = gameObject.GetComponent<Enemy>();
             StartSensor();
         }
 
