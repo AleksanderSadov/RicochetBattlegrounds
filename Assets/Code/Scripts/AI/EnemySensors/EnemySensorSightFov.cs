@@ -4,7 +4,8 @@ namespace Unity.Ricochet.AI
 {
     public class EnemySensorSightFov : EnemySensorSight
     {
-        public Material material;
+        public bool showFov = true;
+        public Material fovMaterial;
 
         private int quality = 100;
         private Mesh mesh;
@@ -17,6 +18,12 @@ namespace Unity.Ricochet.AI
         protected override void UpdateSensor()
         {
             base.UpdateSensor();
+
+            if (!showFov)
+            {
+                return;
+            }
+
             UpdateFov();
         }
 
@@ -123,7 +130,7 @@ namespace Unity.Ricochet.AI
             mesh.vertices = vertices;
             mesh.triangles = triangles;
             mesh.RecalculateNormals();
-            Graphics.DrawMesh(mesh, Vector3.zero, Quaternion.identity, material, 0);
+            Graphics.DrawMesh(mesh, Vector3.zero, Quaternion.identity, fovMaterial, 0);
         }
 
         private float GetEnemyAngle()
