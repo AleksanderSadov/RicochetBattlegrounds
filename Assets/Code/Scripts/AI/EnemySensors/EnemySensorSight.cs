@@ -9,17 +9,19 @@ namespace Unity.Ricochet.AI
         float height = 2.0f;
         public LayerMask hitTestMask;
 
-        protected override void StartSensor()
+        protected override void Start()
         {
-            
+            base.Start();
         }
 
-        protected override void UpdateSensor()
+        protected override void Update()
         {
-            GetTargetInSight();
+            base.Update();
+
+            FindTargetInSight();
         }
 
-        private void GetTargetInSight()
+        private void FindTargetInSight()
         {
             Collider[] overlapedObjects = Physics.OverlapSphere(transform.position, SIGHT_MAX_DISTANCE);
 
@@ -29,7 +31,7 @@ namespace Unity.Ricochet.AI
                 float objAngle = Vector3.Angle(direction, transform.forward);
                 if (overlapedObjects[i].tag == "Player")
                 {
-                    if (objAngle < SIGHT_DIRECT_ANGLE && TargetInSight(overlapedObjects[i].transform, SIGHT_MAX_DISTANCE))
+                    if (objAngle < SIGHT_DIRECT_ANGLE && IsTargetInSight(overlapedObjects[i].transform, SIGHT_MAX_DISTANCE))
                     {
                         enemy.SetTargetPos(overlapedObjects[i].transform.position);
                     }
@@ -37,7 +39,7 @@ namespace Unity.Ricochet.AI
             }
         }
 
-        private bool TargetInSight(Transform target, float distance)
+        private bool IsTargetInSight(Transform target, float distance)
         {
             Vector3 sightPosition = transform.position;
             sightPosition.y += height;

@@ -10,14 +10,15 @@ namespace Unity.Ricochet.AI
         private int quality = 100;
         private Mesh mesh;
 
-        protected override void StartSensor()
+        protected override void Start()
         {
-            base.StartSensor();
+            base.Start();
+
             InitFov();
         }
-        protected override void UpdateSensor()
+        protected override void Update()
         {
-            base.UpdateSensor();
+            base.Update();
 
             if (!showFov)
             {
