@@ -9,13 +9,10 @@ namespace Unity.Ricochet.AI
         Timer idleRotateTimer;
         bool idleWaiting, idleMoving;
 
-        public EnemyStateIdleRoam(Enemy enemy) : base(enemy)
+        protected override void Start()
         {
+            base.Start();
 
-        }
-
-        public override void InitState()
-        {
             if (idleTimer == null)
             {
                 idleTimer = enemy.gameObject.AddComponent<Timer>();
@@ -33,8 +30,10 @@ namespace Unity.Ricochet.AI
             AdvanceIdle();
         }
 
-        public override void UpdateState()
+        protected override void Update()
         {
+            base.Update();
+
             if (idleMoving)
             {
                 if (HasReachedMyDestination())
@@ -70,11 +69,6 @@ namespace Unity.Ricochet.AI
                 idleMoving = !idleMoving;
                 idleWaiting = !idleMoving;
             }
-        }
-
-        public override void EndState()
-        {
-
         }
 
         private void AdvanceIdle()

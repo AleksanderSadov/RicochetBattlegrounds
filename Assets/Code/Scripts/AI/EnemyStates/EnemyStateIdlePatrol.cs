@@ -2,13 +2,10 @@ namespace Unity.Ricochet.AI
 {
     public class EnemyStateIdlePatrol : EnemyStateBase
     {
-        public EnemyStateIdlePatrol(Enemy enemy) : base(enemy)
+        protected override void Start()
         {
+            base.Start();
 
-        }
-
-        public override void InitState()
-        {
             if (enemy.patrolNode == null)
             {
                 return;
@@ -18,8 +15,10 @@ namespace Unity.Ricochet.AI
             enemy.navMeshAgent.SetDestination(enemy.patrolNode.GetPosition());
         }
 
-        public override void UpdateState()
+        protected override void Update()
         {
+            base.Update();
+
             if (enemy.patrolNode == null)
             {
                 return;
@@ -30,11 +29,6 @@ namespace Unity.Ricochet.AI
                 enemy.patrolNode = enemy.patrolNode.nextNode;
                 enemy.navMeshAgent.SetDestination(enemy.patrolNode.GetPosition());
             }
-        }
-
-        public override void EndState()
-        {
-
         }
     }
 }

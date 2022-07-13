@@ -10,20 +10,17 @@ namespace Unity.Ricochet.AI
         Timer inspectTurnTimer;
         bool inspectWait;
 
-        public EnemyStateInspect(Enemy enemy) : base(enemy)
+        protected override void Start()
         {
+            base.Start();
 
-        }
-
-        public override void InitState()
-        {
             if (inspectTimer == null)
             {
-                inspectTimer = enemy.gameObject.AddComponent<Timer>();
+                inspectTimer = gameObject.AddComponent<Timer>();
             }
             if (inspectTurnTimer == null)
             {
-                inspectTurnTimer = enemy.gameObject.AddComponent<Timer>();
+                inspectTurnTimer = gameObject.AddComponent<Timer>();
             }
 
             enemy.navMeshAgent.speed = 16.0f;
@@ -32,8 +29,10 @@ namespace Unity.Ricochet.AI
             inspectWait = false;
         }
 
-        public override void UpdateState()
+        protected override void Update()
         {
+            base.Update();
+
             if (HasReachedMyDestination() && !inspectWait)
             {
                 inspectWait = true;
@@ -61,11 +60,6 @@ namespace Unity.Ricochet.AI
                     enemy.SetState(enemy.idleState);
                 }
             }
-        }
-
-        public override void EndState()
-        {
-
         }
     }
 }

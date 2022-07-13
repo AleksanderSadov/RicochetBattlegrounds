@@ -2,18 +2,24 @@ using UnityEngine;
 
 namespace Unity.Ricochet.AI
 {
-    public abstract class EnemyStateBase
+    public abstract class EnemyStateBase : MonoBehaviour
     {
         protected Enemy enemy;
 
-        public EnemyStateBase(Enemy enemy)
+        protected virtual void Start()
         {
-            this.enemy = enemy;
+            enemy = GetComponent<Enemy>();
         }
 
-        public abstract void InitState();
-        public abstract void UpdateState();
-        public abstract void EndState();
+        protected virtual void Update()
+        {
+
+        }
+
+        protected virtual void OnDestroy()
+        {
+
+        }
 
         protected bool HasReachedMyDestination()
         {

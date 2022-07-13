@@ -9,13 +9,10 @@ namespace Unity.Ricochet.AI
         private Timer attackActionTimer;
         private bool actionDone;
 
-        public EnemyStateAttack(Enemy enemy) : base(enemy)
+        protected override void Start()
         {
+            base.Start();
 
-        }
-
-        public override void InitState()
-        {
             if (attackActionTimer == null)
             {
                 attackActionTimer = enemy.gameObject.AddComponent<Timer>();
@@ -24,31 +21,57 @@ namespace Unity.Ricochet.AI
             enemy.navMeshAgent.isStopped = true;
             enemy.navMeshAgent.velocity = Vector3.zero;
             enemy.animator.SetBool("Attack", true);
-            enemy.CancelInvoke("AttackAction");
-            enemy.Invoke("AttackAction", enemy.weaponActionTime);
+            CancelInvoke("AttackAction");
+            Invoke("AttackAction", enemy.weaponActionTime);
             attackActionTimer.StartTimer(enemy.weaponTime);
 
             actionDone = false;
         }
 
-        public override void UpdateState()
+        protected override void Update()
         {
+            base.Update();
+
             if (!actionDone && attackActionTimer.isFinished)
             {
-                EndAttack();
-
+                enemy.SetState(EnemyStateType.INSPECT);
                 actionDone = true;
             }
         }
 
-        public override void EndState()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
+
             enemy.animator.SetBool("Attack", false);
         }
 
-        private void EndAttack()
+        private void AttackAction()
         {
-            enemy.SetState(EnemyStateType.INSPECT);
+            switch (enemy.weaponType)
+            {
+                case EnemyWeaponType.KNIFE:
+                    RaycastHit[] hits = Physics.SphereCastAll(enemy.weaponPivot.position, 2.0f, enemy.weaponPivot.forward);
+                    foreach (RaycastHit hit in hits)
+                    {
+                        if (hit.collider != null && hit.collider.tag == "Player")
+                        {
+                            hit.collider.GetComponent<Damageable>().Kill();
+                        }
+                    }
+                    break;
+                case EnemyWeaponType.RIFLE:
+                    GameObject bullet = Instantiate(enemy.projectilePrefab, enemy.weaponPivot.position, enemy.weaponPivot.rotation);
+                    bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
+                    break;
+                case EnemyWeaponType.SHOTGUN:
+                    for (int i = 0; i < 5; i++)
+                    {
+                        GameObject birdshot = Instantiate(enemy.projectilePrefab, enemy.weaponPivot.position, enemy.weaponPivot.rotation);
+                        birdshot.transform.Rotate(0, Random.Range(-15, 15), 0);
+                    }
+                    break;
+            }
         }
     }
 }

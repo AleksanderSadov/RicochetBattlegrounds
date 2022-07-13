@@ -44,7 +44,6 @@ namespace Unity.Ricochet.AI
 
         private void Update()
         {
-            currentState.UpdateState();
             animator.SetFloat(hashSpeed, navMeshAgent.velocity.magnitude);
         }
 
@@ -55,36 +54,35 @@ namespace Unity.Ricochet.AI
                 return;
             }
 
+            if (currentState != null)
+            {
+                Destroy(GetComponent(currentState.GetType()));
+            }
+
             EnemyStateBase newState;
             switch (newStateType)
             {
                 case EnemyStateType.IDLE_STATIC:
-                    newState = new EnemyStateIdleStatic(this);
+                    newState = gameObject.AddComponent<EnemyStateIdleStatic>();
                     break;
                 case EnemyStateType.IDLE_ROAM:
-                    newState = new EnemyStateIdleRoam(this);
+                    newState = gameObject.AddComponent<EnemyStateIdleRoam>();
                     break;
                 case EnemyStateType.IDLE_PATROL:
-                    newState = new EnemyStateIdlePatrol(this);
+                    newState = gameObject.AddComponent<EnemyStateIdlePatrol>();
                     break;
                 case EnemyStateType.INSPECT:
-                    newState = new EnemyStateInspect(this);
+                    newState = gameObject.AddComponent<EnemyStateInspect>();
                     break;
                 case EnemyStateType.ATTACK:
-                    newState = new EnemyStateAttack(this);
+                    newState = gameObject.AddComponent<EnemyStateAttack>();
                     break;
                 default:
-                    newState = new EnemyStateIdleStatic(this);
+                    newState = gameObject.AddComponent<EnemyStateIdleStatic>();
                     break;
             }
 
-            if (currentState != null)
-            {
-                currentState.EndState();
-            }
-            
             currentState = newState;
-            currentState.InitState();
             currentStateType = newStateType;
         }
 
@@ -108,34 +106,6 @@ namespace Unity.Ricochet.AI
                     weaponRange = 20.0f;
                     weaponActionTime = 0.35f;
                     weaponTime = 0.75f;
-                    break;
-            }
-        }
-
-        private void AttackAction()
-        {
-            switch (weaponType)
-            {
-                case EnemyWeaponType.KNIFE:
-                    RaycastHit[] hits = Physics.SphereCastAll(weaponPivot.position, 2.0f, weaponPivot.forward);
-                    foreach (RaycastHit hit in hits)
-                    {
-                        if (hit.collider != null && hit.collider.tag == "Player")
-                        {
-                            hit.collider.GetComponent<Damageable>().Kill();
-                        }
-                    }
-                    break;
-                case EnemyWeaponType.RIFLE:
-                    GameObject bullet = Instantiate(projectilePrefab, weaponPivot.position, weaponPivot.rotation);
-                    bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
-                    break;
-                case EnemyWeaponType.SHOTGUN:
-                    for (int i = 0; i < 5; i++)
-                    {
-                        GameObject birdshot = Instantiate(projectilePrefab, weaponPivot.position, weaponPivot.rotation);
-                        birdshot.transform.Rotate(0, Random.Range(-15, 15), 0);
-                    }
                     break;
             }
         }
