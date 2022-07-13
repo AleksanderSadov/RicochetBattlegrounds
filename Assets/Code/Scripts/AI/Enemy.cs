@@ -131,7 +131,6 @@ namespace Unity.Ricochet.AI
         private void OnDie()
         {
             navMeshAgent.velocity = Vector3.zero;
-            navMeshAgent.isStopped = true;
             animator.SetBool("Dead", true);
             animator.transform.parent = null;
             scoreManager.AddScore(100);
