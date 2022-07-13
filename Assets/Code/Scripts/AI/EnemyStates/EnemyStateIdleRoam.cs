@@ -16,10 +16,12 @@ namespace Unity.Ricochet.AI
             if (idleTimer == null)
             {
                 idleTimer = enemy.gameObject.AddComponent<Timer>();
+                idleTimer.timerName = "idleTimer";
             }
             if (idleRotateTimer == null)
             {
                 idleRotateTimer = enemy.gameObject.AddComponent<Timer>();
+                idleRotateTimer.timerName = "idleRotateTimer";
             }
 
             enemy.navMeshAgent.speed = 7.0f;
@@ -69,6 +71,12 @@ namespace Unity.Ricochet.AI
                 idleMoving = !idleMoving;
                 idleWaiting = !idleMoving;
             }
+        }
+
+        protected override void OnDestroy()
+        {
+            DestroyTimers(idleTimer.timerName, idleRotateTimer.timerName);
+            base.OnDestroy();
         }
 
         private void AdvanceIdle()

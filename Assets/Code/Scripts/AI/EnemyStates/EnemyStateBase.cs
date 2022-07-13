@@ -1,3 +1,4 @@
+using Unity.Ricochet.Game;
 using UnityEngine;
 
 namespace Unity.Ricochet.AI
@@ -42,6 +43,24 @@ namespace Unity.Ricochet.AI
             }
 
             enemy.transform.Rotate(0, randomAngle, 0);
+        }
+
+        protected void DestroyTimers(params string[] timersNames)
+        {
+            Component[] timers = GetComponents<Timer>();
+            foreach (Timer timer in timers)
+            {
+                if (string.IsNullOrEmpty(timer.timerName))
+                {
+                    continue;
+                }
+
+                int index = System.Array.IndexOf(timersNames, timer.timerName);
+                if (index > -1)
+                {
+                    Destroy(timer);
+                }
+            }
         }
     }
 }

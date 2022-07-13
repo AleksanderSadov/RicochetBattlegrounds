@@ -17,10 +17,12 @@ namespace Unity.Ricochet.AI
             if (inspectTimer == null)
             {
                 inspectTimer = gameObject.AddComponent<Timer>();
+                inspectTimer.timerName = "inspectTimer";
             }
             if (inspectTurnTimer == null)
             {
                 inspectTurnTimer = gameObject.AddComponent<Timer>();
+                inspectTurnTimer.timerName = "inspectTurnTimer";
             }
 
             enemy.navMeshAgent.speed = 16.0f;
@@ -60,6 +62,12 @@ namespace Unity.Ricochet.AI
                     enemy.SetState(enemy.idleState);
                 }
             }
+        }
+
+        protected override void OnDestroy()
+        {
+            DestroyTimers(inspectTimer.timerName, inspectTurnTimer.timerName);
+            base.OnDestroy();
         }
     }
 }

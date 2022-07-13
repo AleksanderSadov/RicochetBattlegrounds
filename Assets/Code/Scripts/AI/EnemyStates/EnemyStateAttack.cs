@@ -16,6 +16,7 @@ namespace Unity.Ricochet.AI
             if (attackActionTimer == null)
             {
                 attackActionTimer = enemy.gameObject.AddComponent<Timer>();
+                attackActionTimer.timerName = "attackActionTimer";
             }
 
             enemy.navMeshAgent.isStopped = true;
@@ -41,9 +42,9 @@ namespace Unity.Ricochet.AI
 
         protected override void OnDestroy()
         {
-            base.OnDestroy();
-
+            DestroyTimers(attackActionTimer.timerName);
             enemy.animator.SetBool("Attack", false);
+            base.OnDestroy();
         }
 
         private void AttackAction()

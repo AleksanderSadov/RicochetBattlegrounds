@@ -4,9 +4,9 @@ namespace Unity.Ricochet.Game
 {
     public class Timer : MonoBehaviour
     {
+        public string timerName;
         public bool isActive { get; private set; } = false;
         public bool isFinished { get; private set; } = false;
-
         public float timeElapsed { get; private set; } = 0;
         public float duration { get; private set; } = 0;
 
