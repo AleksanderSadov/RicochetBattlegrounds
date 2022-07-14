@@ -6,7 +6,6 @@ namespace Unity.Ricochet.AI
     {
         protected const float SIGHT_DIRECT_ANGLE = 120.0f, SIGHT_MIN_DISTANCE = 0.2f, SIGHT_MAX_DISTANCE = 20.0f;
 
-        float height = 2.0f;
         public LayerMask hitTestMask;
 
         protected override void Start()
@@ -42,7 +41,6 @@ namespace Unity.Ricochet.AI
         private bool IsTargetInSight(Transform target, float distance)
         {
             Vector3 sightPosition = transform.position;
-            sightPosition.y += height;
             RaycastHit hit = new RaycastHit();
             Vector3 dir = target.position - sightPosition;
             Physics.Raycast(sightPosition, dir, out hit, distance, hitTestMask);
