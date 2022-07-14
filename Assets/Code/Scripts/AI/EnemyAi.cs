@@ -37,7 +37,6 @@ namespace Unity.Ricochet.AI
                     {
                         aiState = AIState.Attack;
                         enemyController.SetNavDestination(transform.position);
-                        enemyController.animator.SetBool("Attack", true);
                     }
                     break;
                 case AIState.Attack:
@@ -59,7 +58,7 @@ namespace Unity.Ricochet.AI
                     break;
                 case AIState.Attack:
                     enemyController.OrientTowards(enemyController.detectedTarget.transform.position);
-                    enemyController.Attack();
+                    enemyController.TryAttack();
                     break;
             }
         }

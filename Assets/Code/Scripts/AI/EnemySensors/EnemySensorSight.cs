@@ -7,11 +7,13 @@ namespace Unity.Ricochet.AI
         public float detectionAngle = 120.0f;
         public float detectionRange = 20.0f;
         public float attackRange = 20.0f;
+        public float attackAngle = 20.0f;
 
         public LayerMask hitTestMask;
         public GameObject detectedTarget;
         public bool isSeeingTarget;
         public bool isTargetInAttackRange;
+        public bool isTargetInAttackAngle;
 
         protected virtual void Start()
         {
@@ -26,6 +28,9 @@ namespace Unity.Ricochet.AI
         protected virtual void FindTargetInSight()
         {
             isSeeingTarget = false;
+            isTargetInAttackRange = false;
+            isTargetInAttackAngle = false;
+            detectedTarget = null;
 
             Collider[] overlapedObjects = Physics.OverlapSphere(transform.position, detectionRange);
             for (int i = 0; i < overlapedObjects.Length; i++)
@@ -38,11 +43,11 @@ namespace Unity.Ricochet.AI
                     {
                         isSeeingTarget = true;
                         detectedTarget = overlapedObjects[i].transform.gameObject;
+                        isTargetInAttackRange = Vector3.Distance(transform.position, detectedTarget.transform.position) <= attackRange;
+                        isTargetInAttackAngle = objAngle < attackAngle;
                     }
                 }
             }
-
-            isTargetInAttackRange = detectedTarget != null && Vector3.Distance(transform.position, detectedTarget.transform.position) <= attackRange;
         }
 
         private bool IsTargetInDirectSight(Transform target, float distance)

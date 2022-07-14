@@ -13,10 +13,11 @@ namespace Unity.Ricochet.AI
         public GameObject projectilePrefab;
         public Transform weaponPivot;
 
+        public GameObject detectedTarget => sensorSightFov.detectedTarget;
         public bool isSeeingTarget => sensorSightFov.isSeeingTarget;
         public bool isTargetInAttackRange => sensorSightFov.isTargetInAttackRange;
-        public GameObject detectedTarget => sensorSightFov.detectedTarget;
-
+        public bool isTargetInAttackAngle => sensorSightFov.isTargetInAttackAngle;
+        
         private NavMeshAgent navMeshAgent;
         private EnemySensorFindPlayer sensorFindPlayer;
         private EnemySensorSightFov sensorSightFov;
@@ -68,13 +69,14 @@ namespace Unity.Ricochet.AI
             }
         }
 
-        public void Attack()
+        public void TryAttack()
         {
-            if (Time.time - lastTimeAttacked < delayBetweenAttacks)
+            if (Time.time - lastTimeAttacked < delayBetweenAttacks || !isTargetInAttackAngle)
             {
                 return;
             }
 
+            animator.SetBool("Attack", true);
             GameObject bullet = Instantiate(projectilePrefab, weaponPivot.position, weaponPivot.rotation);
             bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
             lastTimeAttacked = Time.time;

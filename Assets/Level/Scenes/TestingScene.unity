@@ -1785,7 +1785,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2034113850}
   - component: {fileID: 2021285300}
-  - component: {fileID: 2039773888}
   m_Layer: 0
   m_Name: MouseCrosshair
   m_TagString: Untagged
@@ -2048,21 +2047,6 @@ MonoBehaviour:
   selectorKnife: {fileID: 2033962402}
   selectorGun: {fileID: 2033732162}
   aimTip: {fileID: 1180934905}
---- !u!114 &2039773888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2033923198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d327c73dec2454847b609794346f4463, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: {x: 1, y: 1}
-  scale: {x: 4, y: 4}
-  easetype: 14
 --- !u!1 &2039837706
 GameObject:
   m_ObjectHideFlags: 0
