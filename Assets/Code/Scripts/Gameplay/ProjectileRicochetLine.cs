@@ -52,8 +52,10 @@ namespace Unity.Ricochet.Gameplay
 
         private bool IsDeflected(Ray originRay, out Ray deflectedRay, out RaycastHit deflectHit)
         {
+            int bulletsLayerMask = 1 << LayerMask.NameToLayer("Bullets");
+            int allExceptBulletsLayerMask = ~bulletsLayerMask;
 
-            if (Physics.Raycast(originRay, out deflectHit))
+            if (Physics.Raycast(originRay, out deflectHit, Mathf.Infinity, allExceptBulletsLayerMask))
             {
                 Vector3 normal = deflectHit.normal;
                 Vector3 deflect = Vector3.Reflect(originRay.direction, normal);
