@@ -5,6 +5,7 @@ namespace Unity.Ricochet.Gameplay
     public class ProjectileRicochetLine : MonoBehaviour
     {
         [SerializeField] private GameObject gunPivot;
+        [SerializeField] private GameObject mousePointer;
         [SerializeField] private Material ricochetLineMaterial;
         [SerializeField] private int maxDeflectsCalculations = 1;
         [SerializeField] private int currentDeflectsCount = 0;
@@ -18,7 +19,7 @@ namespace Unity.Ricochet.Gameplay
 
         private void Update()
         {
-            Ray originRay = new Ray(gunPivot.transform.position, gunPivot.transform.forward);
+            Ray originRay = new Ray(gunPivot.transform.position, mousePointer.transform.position - gunPivot.transform.position);
             Ray deflectedRay;
             RaycastHit deflectHit;
 

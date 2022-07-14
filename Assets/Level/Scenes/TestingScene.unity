@@ -3614,9 +3614,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunPivot: {fileID: 2033956340}
+  mousePointer: {fileID: 2033923198}
   ricochetLineMaterial: {fileID: 2100000, guid: 42683ea4d55574a49bec3d843919fae8,
     type: 2}
-  maxDeflectsCalculations: 3
+  maxDeflectsCalculations: 2
   currentDeflectsCount: 0
 --- !u!1 &2107349398
 GameObject:
