@@ -224,7 +224,7 @@ namespace Unity.Ricochet.Gameplay
                         animator.SetInteger("WeaponType", 0);
                         break;
                     case PlayerWeaponType.PISTOL:
-                        attackTime = 0.1f;
+                        attackTime = 0.5f;
                         animator.SetInteger("WeaponType", 3);
                         break;
                 }
