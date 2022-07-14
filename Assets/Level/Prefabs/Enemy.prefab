@@ -53,18 +53,14 @@ MonoBehaviour:
   inspectTimeout: 2
   navMeshAgent: {fileID: 19589718}
   animator: {fileID: 9511058}
-  projectilePrefab: {fileID: 181756, guid: a44d52233ec3ec94baaa1841d362d494, type: 3}
-  weaponType: 2
-  idleState: 2
+  projectilePrefab: {fileID: 181756, guid: 557ed858a06543346b65755da98b1aee, type: 3}
+  weaponType: 1
+  idleState: 1
   hitTestLayer:
     serializedVersion: 2
     m_Bits: 4294966015
   weaponPivot: {fileID: 424618}
-  targetPosition: {x: 0, y: 0, z: 0}
   patrolNode: {fileID: 0}
-  weaponRange: 0
-  weaponActionTime: 0
-  weaponTime: 0
 --- !u!114 &5820781825812640167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,7 +77,7 @@ MonoBehaviour:
   hitTestMask:
     serializedVersion: 2
     m_Bits: 2147483647
-  showFov: 1
+  showFov: 0
   fovMaterial: {fileID: 2100000, guid: 3a003d3c913e5d2498da8502b8a57dd3, type: 2}
 --- !u!195 &19589718
 NavMeshAgent:

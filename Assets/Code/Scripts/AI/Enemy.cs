@@ -17,10 +17,13 @@ namespace Unity.Ricochet.AI
         public EnemyStateType idleState = EnemyStateType.IDLE_ROAM;
         public LayerMask hitTestLayer;
         public Transform weaponPivot;
-        public Vector3 targetPosition;
-        public Vector3 startingPosition { get; private set; }
         public PatrolNode patrolNode;
-        public float weaponRange, weaponActionTime, weaponTime;
+
+        public Vector3 startingPosition { get; private set; }
+        public float weaponRange { get; private set; }
+        public float weaponActionTime { get; private set; }
+        public float weaponTime { get; private set; }
+        public Vector3 targetPosition { get; private set; }
 
         private EnemyStateType currentStateType = EnemyStateType.NONE;
         private EnemyStateBase currentState;

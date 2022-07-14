@@ -5,7 +5,6 @@ namespace Unity.Ricochet.Game
 {
     public class GameManager : MonoBehaviour
     {
-        public GameObject endSection;
         public bool isGameOver = false;
 
         private void Start()
@@ -30,7 +29,8 @@ namespace Unity.Ricochet.Game
 
         private void OnAllEnemiesKilled(AllEnemiesKilled evt)
         {
-            endSection.SetActive(true);
+            isGameOver = true;
+            EventManager.Broadcast(new GameOverEvent());
         }
 
         private void OnDestroy()
