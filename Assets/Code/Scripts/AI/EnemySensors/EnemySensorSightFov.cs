@@ -55,6 +55,9 @@ namespace Unity.Ricochet.AI
         
         private void UpdateFov()
         {
+            int bulletsLayerMask = 1 << LayerMask.NameToLayer("Bullets");
+            int allExceptBulletsLayerMask = ~bulletsLayerMask;
+
             float angle_lookat = GetEnemyAngle();
 
             float angle_start = angle_lookat - SIGHT_DIRECT_ANGLE;
@@ -97,8 +100,8 @@ namespace Unity.Ricochet.AI
                 int d = 4 * i + 3;
 
                 RaycastHit currRay = new RaycastHit(), nextRay = new RaycastHit();
-                Physics.Raycast(pos_curr_min, pos_curr_max - pos_curr_min, out currRay, SIGHT_MAX_DISTANCE - SIGHT_MIN_DISTANCE);
-                Physics.Raycast(pos_next_min, pos_next_max - pos_next_min, out nextRay, SIGHT_MAX_DISTANCE - SIGHT_MIN_DISTANCE);
+                Physics.Raycast(pos_curr_min, pos_curr_max - pos_curr_min, out currRay, SIGHT_MAX_DISTANCE - SIGHT_MIN_DISTANCE, allExceptBulletsLayerMask);
+                Physics.Raycast(pos_next_min, pos_next_max - pos_next_min, out nextRay, SIGHT_MAX_DISTANCE - SIGHT_MIN_DISTANCE, allExceptBulletsLayerMask);
 
                 if (currRay.collider != null)
                 {
