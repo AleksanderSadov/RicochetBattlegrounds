@@ -3434,7 +3434,7 @@ MonoBehaviour:
   knifePivot: {fileID: 2034235112}
   gunPivot: {fileID: 2034113650}
   mousePointer: {fileID: 2033923198}
-  projectilePrefab: {fileID: 181756, guid: 700d55f169d41a14896ad56d0bd5dec8, type: 3}
+  projectilePrefab: {fileID: 181756, guid: 557ed858a06543346b65755da98b1aee, type: 3}
   animator: {fileID: 2041302206}
   playerCamera: {fileID: 2039995700}
 --- !u!114 &2039964230
