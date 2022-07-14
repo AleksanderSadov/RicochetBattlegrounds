@@ -1,37 +1,53 @@
-﻿using Unity.Ricochet.Game;
+﻿using System.Collections;
+using Unity.Ricochet.Game;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 namespace Unity.Ricochet.AI
 {
     public class EnemyController : MonoBehaviour
     {
         public float delayBetweenAttacks = 0.5f;
+        public float delayBetweenEvades = 1.0f;
         public float orientationSpeed = 10f;
+        public float evadeDistance = 10f;
+        public float evadeDuration = 1f;
+
+        public bool isEvading = false;
+        public float lastTimeAttacked = 0;
+        public float lastTimeEvaded = 0;
 
         public Animator animator;
         public GameObject projectilePrefab;
         public Transform weaponPivot;
 
+        public UnityAction onDangerDetected;
+        public UnityAction onEvadeComplete;
+
         public GameObject detectedTarget => sensorSightFov.detectedTarget;
         public bool isSeeingTarget => sensorSightFov.isSeeingTarget;
         public bool isTargetInAttackRange => sensorSightFov.isTargetInAttackRange;
         public bool isTargetInAttackAngle => sensorSightFov.isTargetInAttackAngle;
+        public bool isDangerDetected => sensorDanger.isDangerDetected;
+        public GameObject detectedBullet => sensorDanger.detectedBullet;
         
         private NavMeshAgent navMeshAgent;
         private EnemySensorFindPlayer sensorFindPlayer;
         private EnemySensorSightFov sensorSightFov;
+        private EnemySensorDanger sensorDanger;
         private Damageable damageable;
         private EnemyManager enemyManager;
         private ScoreManager scoreManager;
         private int hashSpeed;
-        private float lastTimeAttacked = 0;
 
         private void Start()
         {
             navMeshAgent = GetComponent<NavMeshAgent>();
             sensorFindPlayer = GetComponentInChildren<EnemySensorFindPlayer>();
             sensorSightFov = GetComponentInChildren<EnemySensorSightFov>();
+            sensorDanger = GetComponentInChildren<EnemySensorDanger>();
+            sensorDanger.onDangerDetected += OnDangerDetected;
             enemyManager = FindObjectOfType<EnemyManager>();
             scoreManager = FindObjectOfType<ScoreManager>();
             damageable = GetComponent<Damageable>();
@@ -77,9 +93,32 @@ namespace Unity.Ricochet.AI
             }
 
             animator.SetBool("Attack", true);
-            GameObject bullet = Instantiate(projectilePrefab, weaponPivot.position, weaponPivot.rotation);
-            bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
+            //GameObject bullet = Instantiate(projectilePrefab, weaponPivot.position, weaponPivot.rotation);
+            //bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
             lastTimeAttacked = Time.time;
+        }
+
+        public void TryEvade(Vector3 bulletDirection)
+        {
+            isEvading = true;
+
+            Vector3 evadeVector = Vector3.Cross(bulletDirection, Vector3.up) * evadeDistance;
+            SetNavDestination(transform.position + evadeVector);
+
+            lastTimeEvaded = Time.time;
+            StartCoroutine(WaitEvadeDuration());
+        }
+
+        private void OnDangerDetected()
+        {
+            onDangerDetected?.Invoke();
+        }
+
+        private IEnumerator WaitEvadeDuration()
+        {
+            yield return new WaitForSeconds(evadeDuration);
+            isEvading = false;
+            onEvadeComplete?.Invoke();
         }
 
         private void OnDie()

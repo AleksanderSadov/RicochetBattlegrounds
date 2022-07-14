@@ -10,6 +10,7 @@ namespace Unity.Ricochet.AI
         {
             Follow,
             Attack,
+            Evade,
         }
 
         public AIState aiState;
@@ -19,6 +20,8 @@ namespace Unity.Ricochet.AI
         private void Start()
         {
             enemyController = GetComponent<EnemyController>();
+            enemyController.onDangerDetected += OnDangerDetected;
+            enemyController.onEvadeComplete += OnEvadeComplete;
             aiState = AIState.Follow;
         }
 
@@ -46,6 +49,8 @@ namespace Unity.Ricochet.AI
                         enemyController.animator.SetBool("Attack", false);
                     }
                     break;
+                case AIState.Evade:
+                    break;
             }
         }
 
@@ -60,7 +65,28 @@ namespace Unity.Ricochet.AI
                     enemyController.OrientTowards(enemyController.detectedTarget.transform.position);
                     enemyController.TryAttack();
                     break;
+                case AIState.Evade:
+                    if (!enemyController.isEvading && enemyController.detectedBullet)
+                    {
+                        enemyController.TryEvade(enemyController.detectedBullet.transform.forward);
+                    }
+                    break;
             }
+        }
+
+        private void OnDangerDetected()
+        {
+            if (Time.time - enemyController.lastTimeEvaded < enemyController.delayBetweenEvades)
+            {
+                return;
+            }
+
+            aiState = AIState.Evade;
+        }
+
+        private void OnEvadeComplete()
+        {
+            aiState = AIState.Follow;
         }
     }
 }

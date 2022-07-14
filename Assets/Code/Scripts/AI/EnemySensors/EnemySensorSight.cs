@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Ricochet.Game;
+using UnityEngine;
 
 namespace Unity.Ricochet.AI
 {
@@ -37,28 +38,19 @@ namespace Unity.Ricochet.AI
             {
                 Vector3 direction = (overlapedObjects[i].transform.position - transform.position).normalized;
                 float objAngle = Vector3.Angle(direction, transform.forward);
-                if (overlapedObjects[i].tag == "Player")
+                if (overlapedObjects[i].CompareTag("Player"))
                 {
-                    if (objAngle < detectionAngle && IsTargetInDirectSight(overlapedObjects[i].transform, detectionRange))
+                    if (objAngle < detectionAngle && RayUtilities.IsTargetInDirectSight(transform, overlapedObjects[i].transform, detectionRange, hitTestMask))
                     {
                         isSeeingTarget = true;
                         detectedTarget = overlapedObjects[i].transform.gameObject;
                         isTargetInAttackRange = Vector3.Distance(transform.position, detectedTarget.transform.position) <= attackRange;
                         isTargetInAttackAngle = objAngle < attackAngle;
+
+                        return;
                     }
                 }
             }
-        }
-
-        private bool IsTargetInDirectSight(Transform target, float distance)
-        {
-            Vector3 sightPosition = transform.position;
-            RaycastHit hit;
-            Vector3 direction = (target.position - sightPosition).normalized;
-            Physics.Raycast(sightPosition, direction, out hit, distance, hitTestMask);
-            bool isTargetInDirectSight = hit.collider != null && target.gameObject == hit.collider.gameObject;
-
-            return isTargetInDirectSight;
         }
     }
 }

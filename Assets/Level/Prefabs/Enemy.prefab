@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3106876073866981050}
   - component: {fileID: 5995412254983881048}
   - component: {fileID: 6200466124196585805}
+  - component: {fileID: 1093266705568205050}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -54,6 +55,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delayBetweenAttacks: 0.5
+  delayBetweenEvades: 1
   orientationSpeed: 10
   animator: {fileID: 9511058}
   projectilePrefab: {fileID: 181756, guid: 557ed858a06543346b65755da98b1aee, type: 3}
@@ -161,14 +163,31 @@ MonoBehaviour:
   detectionAngle: 120
   detectionRange: 20
   attackRange: 20
+  attackAngle: 20
   hitTestMask:
     serializedVersion: 2
     m_Bits: 1
   detectedTarget: {fileID: 0}
   isSeeingTarget: 0
   isTargetInAttackRange: 0
+  isTargetInAttackAngle: 0
   showFov: 1
   fovMaterial: {fileID: 2100000, guid: 3a003d3c913e5d2498da8502b8a57dd3, type: 2}
+--- !u!114 &1093266705568205050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8458949a18e363c49b8b8104ab25d644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dangerCheckProximity: 20
+  isDangerDetected: 0
+  detectedBullet: {fileID: 0}
 --- !u!1 &162682
 GameObject:
   m_ObjectHideFlags: 0
