@@ -2,49 +2,58 @@
 
 namespace Unity.Ricochet.AI
 {
-    public class EnemySensorSight : EnemySensorBase
+    public class EnemySensorSight : MonoBehaviour
     {
-        protected const float SIGHT_DIRECT_ANGLE = 120.0f, SIGHT_MIN_DISTANCE = 0.2f, SIGHT_MAX_DISTANCE = 20.0f;
+        public float detectionAngle = 120.0f;
+        public float detectionRange = 20.0f;
+        public float attackRange = 20.0f;
 
         public LayerMask hitTestMask;
+        public GameObject detectedTarget;
+        public bool isSeeingTarget;
+        public bool isTargetInAttackRange;
 
-        protected override void Start()
+        protected virtual void Start()
         {
-            base.Start();
+
         }
 
-        protected override void Update()
+        protected virtual void Update()
         {
-            base.Update();
-
             FindTargetInSight();
         }
 
-        private void FindTargetInSight()
+        protected virtual void FindTargetInSight()
         {
-            Collider[] overlapedObjects = Physics.OverlapSphere(transform.position, SIGHT_MAX_DISTANCE);
+            isSeeingTarget = false;
 
+            Collider[] overlapedObjects = Physics.OverlapSphere(transform.position, detectionRange);
             for (int i = 0; i < overlapedObjects.Length; i++)
             {
-                Vector3 direction = overlapedObjects[i].transform.position - transform.position;
+                Vector3 direction = (overlapedObjects[i].transform.position - transform.position).normalized;
                 float objAngle = Vector3.Angle(direction, transform.forward);
                 if (overlapedObjects[i].tag == "Player")
                 {
-                    if (objAngle < SIGHT_DIRECT_ANGLE && IsTargetInSight(overlapedObjects[i].transform, SIGHT_MAX_DISTANCE))
+                    if (objAngle < detectionAngle && IsTargetInDirectSight(overlapedObjects[i].transform, detectionRange))
                     {
-                        enemy.SetTargetPos(overlapedObjects[i].transform.position);
+                        isSeeingTarget = true;
+                        detectedTarget = overlapedObjects[i].transform.gameObject;
                     }
                 }
             }
+
+            isTargetInAttackRange = detectedTarget != null && Vector3.Distance(transform.position, detectedTarget.transform.position) <= attackRange;
         }
 
-        private bool IsTargetInSight(Transform target, float distance)
+        private bool IsTargetInDirectSight(Transform target, float distance)
         {
             Vector3 sightPosition = transform.position;
-            RaycastHit hit = new RaycastHit();
-            Vector3 dir = target.position - sightPosition;
-            Physics.Raycast(sightPosition, dir, out hit, distance, hitTestMask);
-            return (hit.collider != null && target.gameObject == hit.collider.gameObject);
+            RaycastHit hit;
+            Vector3 direction = (target.position - sightPosition).normalized;
+            Physics.Raycast(sightPosition, direction, out hit, distance, hitTestMask);
+            bool isTargetInDirectSight = hit.collider != null && target.gameObject == hit.collider.gameObject;
+
+            return isTargetInDirectSight;
         }
     }
 }

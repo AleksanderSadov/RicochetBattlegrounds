@@ -1,5 +1,4 @@
-﻿using Unity.Ricochet.AI;
-using Unity.Ricochet.Game;
+﻿using Unity.Ricochet.Game;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,7 +6,7 @@ namespace Unity.Ricochet.Gameplay
 {
     public enum PlayerWeaponType { KNIFE, PISTOL, NULL }
 
-    public class PlayerBehavior : MonoBehaviour
+    public class PlayerController : MonoBehaviour
     {
         public float moveSpeed = 10.0f;
         public Transform knifePivot, gunPivot;
@@ -29,6 +28,12 @@ namespace Unity.Ricochet.Gameplay
         private void Awake()
         {
             InitTimers();
+
+            ActorsManager actorsManager = FindObjectOfType<ActorsManager>();
+            if (actorsManager != null)
+            {
+                actorsManager.SetPlayer(gameObject);
+            }
         }
 
         private void Start()
@@ -133,7 +138,6 @@ namespace Unity.Ricochet.Gameplay
                     break;
                 case PlayerWeaponType.PISTOL:
                     FireBullet();
-                    AlertEnemies();
                     break;
             }
 
@@ -177,18 +181,6 @@ namespace Unity.Ricochet.Gameplay
             transform.eulerAngles = new Vector3(0, -angleInDegrees, 0);
         }
 
-        private void AlertEnemies()
-        {
-            RaycastHit[] hits = Physics.SphereCastAll(knifePivot.position, 20.0f, knifePivot.up);
-            foreach (RaycastHit hit in hits)
-            {
-                if (hit.collider != null && hit.collider.tag == "Enemy")
-                {
-                    hit.collider.GetComponent<Enemy>().SetAlertPosition(transform.position);
-                }
-            }
-        }
-
         private void KnifeHitCheck()
         {
             RaycastHit[] hits = Physics.SphereCastAll(knifePivot.position, 2.0f, knifePivot.up);
@@ -229,7 +221,7 @@ namespace Unity.Ricochet.Gameplay
                         break;
                 }
 
-                OnWeaponChanged.Invoke(weaponType);
+                OnWeaponChanged?.Invoke(weaponType);
             }
         }
     }

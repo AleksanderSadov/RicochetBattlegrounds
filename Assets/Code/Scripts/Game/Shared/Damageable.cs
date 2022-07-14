@@ -9,7 +9,7 @@ namespace Unity.Ricochet.Game
 
         public void Kill()
         {
-            OnDie?.Invoke();
+            //OnDie?.Invoke();
         }
     }
 }

@@ -4,6 +4,8 @@ namespace Unity.Ricochet.AI
 {
     public class EnemySensorSightFov : EnemySensorSight
     {
+        protected const float SIGHT_MIN_DISTANCE = 0.2f;
+
         public bool showFov = true;
         public Material fovMaterial;
 
@@ -16,6 +18,7 @@ namespace Unity.Ricochet.AI
 
             InitFov();
         }
+
         protected override void Update()
         {
             base.Update();
@@ -60,8 +63,8 @@ namespace Unity.Ricochet.AI
 
             float angle_lookat = GetEnemyAngle();
 
-            float angle_start = angle_lookat - SIGHT_DIRECT_ANGLE;
-            float angle_end = angle_lookat + SIGHT_DIRECT_ANGLE;
+            float angle_start = angle_lookat - detectionAngle;
+            float angle_end = angle_lookat + detectionAngle;
             float angle_delta = (angle_end - angle_start) / quality;
 
             float angle_curr = angle_start;
@@ -90,9 +93,9 @@ namespace Unity.Ricochet.AI
                     Mathf.Cos(Mathf.Deg2Rad * (angle_next)));
 
                 pos_curr_min = fov_position + sphere_curr * SIGHT_MIN_DISTANCE;
-                pos_curr_max = fov_position + sphere_curr * SIGHT_MAX_DISTANCE;
+                pos_curr_max = fov_position + sphere_curr * detectionRange;
                 pos_next_min = fov_position + sphere_next * SIGHT_MIN_DISTANCE;
-                pos_next_max = fov_position + sphere_next * SIGHT_MAX_DISTANCE;
+                pos_next_max = fov_position + sphere_next * detectionRange;
 
                 int a = 4 * i;
                 int b = 4 * i + 1;
@@ -100,8 +103,8 @@ namespace Unity.Ricochet.AI
                 int d = 4 * i + 3;
 
                 RaycastHit currRay = new RaycastHit(), nextRay = new RaycastHit();
-                Physics.Raycast(pos_curr_min, pos_curr_max - pos_curr_min, out currRay, SIGHT_MAX_DISTANCE - SIGHT_MIN_DISTANCE, allExceptBulletsLayerMask);
-                Physics.Raycast(pos_next_min, pos_next_max - pos_next_min, out nextRay, SIGHT_MAX_DISTANCE - SIGHT_MIN_DISTANCE, allExceptBulletsLayerMask);
+                Physics.Raycast(pos_curr_min, pos_curr_max - pos_curr_min, out currRay, detectionRange - SIGHT_MIN_DISTANCE, allExceptBulletsLayerMask);
+                Physics.Raycast(pos_next_min, pos_next_max - pos_next_min, out nextRay, detectionRange - SIGHT_MIN_DISTANCE, allExceptBulletsLayerMask);
 
                 if (currRay.collider != null)
                 {

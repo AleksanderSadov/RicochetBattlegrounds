@@ -9,11 +9,11 @@ namespace Unity.Ricochet.UI
         [SerializeField] private GameObject selectorGun;
         [SerializeField] private GameObject aimTip;
 
-        private PlayerBehavior playerBehavior;
+        private PlayerController playerBehavior;
 
         private void Start()
         {
-            playerBehavior = FindObjectOfType<PlayerBehavior>();
+            playerBehavior = FindObjectOfType<PlayerController>();
 
             playerBehavior.OnWeaponChanged += SelectWeapon;
         }
