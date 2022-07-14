@@ -14,6 +14,7 @@ namespace Unity.Ricochet.Gameplay
         public GameObject mousePointer, projectilePrefab;
         public Animator animator;
         public UnityAction<PlayerWeaponType> OnWeaponChanged;
+        public bool isAimActive = false;
 
         [SerializeField] private GameCamera playerCamera;
 
@@ -23,6 +24,7 @@ namespace Unity.Ricochet.Gameplay
         private PlayerWeaponType currentWeapon = PlayerWeaponType.NULL;
         private Timer attackTimer;
         private Damageable damageable;
+        private ProjectileRicochetLine ricochetSense;
         
         private void Awake()
         {
@@ -31,6 +33,7 @@ namespace Unity.Ricochet.Gameplay
 
         private void Start()
         {
+            ricochetSense = GetComponent<ProjectileRicochetLine>();
             damageable = GetComponent<Damageable>();
             damageable.OnDie += OnDie;
             myRigidBody = GetComponent<Rigidbody>();
@@ -72,6 +75,7 @@ namespace Unity.Ricochet.Gameplay
         {
             HandleMovement();
             HandleWeaponSelection();
+            handleAim();
             HandleAttack();
         }
 
@@ -81,6 +85,18 @@ namespace Unity.Ricochet.Gameplay
             float inputVertical = Input.GetAxis("Vertical");
             Vector3 newVelocity = new Vector3(inputVertical * moveSpeed, 0.0f, inputHorizontal * -moveSpeed);
             myRigidBody.velocity = newVelocity;
+        }
+
+        private void handleAim()
+        {
+            if (currentWeapon != PlayerWeaponType.PISTOL)
+            {
+                return;
+            }
+
+            isAimActive = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            ricochetSense.enabled = isAimActive;
+            mousePointer.GetComponent<SpriteRenderer>().enabled = !isAimActive;
         }
 
         private void HandleAttack()
@@ -116,10 +132,7 @@ namespace Unity.Ricochet.Gameplay
                     Invoke("KnifeHitCheck", 0.2f);
                     break;
                 case PlayerWeaponType.PISTOL:
-                    playerCamera.ToggleShake(0.1f);
-                    GameObject bullet = Instantiate(projectilePrefab, gunPivot.position, gunPivot.rotation);
-                    bullet.transform.LookAt(mousePointer.transform);
-                    bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
+                    FireBullet();
                     AlertEnemies();
                     break;
             }
@@ -128,6 +141,18 @@ namespace Unity.Ricochet.Gameplay
             CancelInvoke("AttackOver");
             Invoke("AttackOver", attackTime);
             attackTimer.StartTimer(attackTime);
+        }
+
+        private void FireBullet()
+        {
+            GameObject bullet = Instantiate(projectilePrefab, gunPivot.position, gunPivot.rotation);
+            bullet.transform.LookAt(mousePointer.transform);
+
+            if (!isAimActive)
+            {
+                playerCamera.ToggleShake(0.1f);
+                bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
+            }
         }
 
         private void OnDie()

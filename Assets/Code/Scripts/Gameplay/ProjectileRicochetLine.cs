@@ -50,6 +50,11 @@ namespace Unity.Ricochet.Gameplay
             while (isDeflected && currentDeflectsCount < maxDeflectsCalculations);
         }
 
+        private void OnDisable()
+        {
+            lineRenderer.positionCount = 0;
+        }
+
         private bool IsDeflected(Ray originRay, out Ray deflectedRay, out RaycastHit deflectHit)
         {
             int bulletsLayerMask = 1 << LayerMask.NameToLayer("Bullets");

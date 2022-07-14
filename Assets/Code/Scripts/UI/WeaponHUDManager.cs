@@ -5,8 +5,9 @@ namespace Unity.Ricochet.UI
 {
     public class WeaponHUDManager : MonoBehaviour
     {
-        [SerializeField] GameObject selectorKnife;
-        [SerializeField] GameObject selectorGun;
+        [SerializeField] private GameObject selectorKnife;
+        [SerializeField] private GameObject selectorGun;
+        [SerializeField] private GameObject aimTip;
 
         private PlayerBehavior playerBehavior;
 
@@ -24,10 +25,12 @@ namespace Unity.Ricochet.UI
                 case PlayerWeaponType.KNIFE:
                     selectorKnife.SetActive(true);
                     selectorGun.SetActive(false);
+                    aimTip.SetActive(false);
                     break;
                 case PlayerWeaponType.PISTOL:
                     selectorKnife.SetActive(false);
                     selectorGun.SetActive(true);
+                    aimTip.SetActive(true);
                     break;
             }
         }
