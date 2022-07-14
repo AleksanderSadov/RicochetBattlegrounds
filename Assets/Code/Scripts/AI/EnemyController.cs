@@ -12,7 +12,7 @@ namespace Unity.Ricochet.AI
         public float delayBetweenEvades = 1.0f;
         public float orientationSpeed = 10f;
         public float evadeDistance = 10f;
-        public float evadeDuration = 1f;
+        public float evadeDuration = 0.5f;
 
         public bool isEvading = false;
         public float lastTimeAttacked = 0;
@@ -93,8 +93,8 @@ namespace Unity.Ricochet.AI
             }
 
             animator.SetBool("Attack", true);
-            //GameObject bullet = Instantiate(projectilePrefab, weaponPivot.position, weaponPivot.rotation);
-            //bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
+            GameObject bullet = Instantiate(projectilePrefab, weaponPivot.position, weaponPivot.rotation);
+            bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
             lastTimeAttacked = Time.time;
         }
 
