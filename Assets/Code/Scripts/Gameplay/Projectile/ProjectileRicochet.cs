@@ -5,7 +5,6 @@ namespace Unity.Ricochet.Gameplay
 {
     public class ProjectileRicochet : MonoBehaviour
     {
-        [SerializeField] private float lifeTime = 3.0f;
         [SerializeField] private float speed = 0.1f;
         [SerializeField] private float safeCollisionDelay = 0.1f;
         
@@ -14,7 +13,6 @@ namespace Unity.Ricochet.Gameplay
         private void Start()
         {
             initializationTime = Time.timeSinceLevelLoad;
-            Destroy(gameObject, lifeTime);
         }
 
         private void Update()
