@@ -19,9 +19,9 @@ namespace Unity.Ricochet.AI
             InitFov();
         }
 
-        protected override void Update()
+        protected override void FixedUpdate()
         {
-            base.Update();
+            base.FixedUpdate();
 
             if (!showFov)
             {

@@ -18,7 +18,7 @@ namespace Unity.Ricochet.Gameplay
             initializationTime = Time.timeSinceLevelLoad;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             transform.Translate(transform.forward * speed, Space.World);
         }

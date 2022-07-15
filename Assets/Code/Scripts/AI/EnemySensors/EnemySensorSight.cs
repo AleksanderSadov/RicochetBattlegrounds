@@ -21,7 +21,7 @@ namespace Unity.Ricochet.AI
 
         }
 
-        protected virtual void Update()
+        protected virtual void FixedUpdate()
         {
             FindTargetInSight();
         }

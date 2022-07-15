@@ -13,7 +13,7 @@ namespace Unity.Ricochet.Gameplay
             Destroy(gameObject, lifeTime);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             transform.Translate(transform.forward * speed, Space.World);
         }

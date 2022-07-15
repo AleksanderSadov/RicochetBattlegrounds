@@ -13,7 +13,7 @@ namespace Unity.Ricochet.AI
         public bool isDangerDetected;
         public GameObject detectedBullet;
 
-        private void Update()
+        private void FixedUpdate()
         {
             CheckBulletsInProximity();
         }
