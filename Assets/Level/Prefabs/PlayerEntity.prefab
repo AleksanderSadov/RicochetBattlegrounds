@@ -331,6 +331,7 @@ GameObject:
   - component: {fileID: 5341997667256832545}
   - component: {fileID: 2433040788137222829}
   - component: {fileID: 8295793979414443872}
+  - component: {fileID: 2034176642}
   m_Layer: 0
   m_Name: PlayerEntity
   m_TagString: Player
@@ -600,3 +601,25 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 39ca7e88dc461e8458d02a2284708c0d, type: 3}
   - {fileID: 8300000, guid: d772d1b334ef5f148bf1308d5fb3e4b0, type: 3}
   audioSource: {fileID: 2433040788137222829}
+--- !u!195 &2034176642
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5760064969112773343}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 10
+  m_Acceleration: 500
+  avoidancePriority: 50
+  m_AngularSpeed: 6000
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 0
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 1
+  m_ObstacleAvoidanceType: 4
