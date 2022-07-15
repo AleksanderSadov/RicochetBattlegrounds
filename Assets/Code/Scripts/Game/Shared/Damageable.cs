@@ -7,8 +7,20 @@ namespace Unity.Ricochet.Game
     {
         public UnityAction OnDie;
 
+        private GameManager gameManager;
+
+        private void Start()
+        {
+            gameManager = FindObjectOfType<GameManager>();
+        }
+
         public void Kill()
         {
+            if (gameManager.isGameOver)
+            {
+                return;
+            }
+
             OnDie?.Invoke();
         }
     }
