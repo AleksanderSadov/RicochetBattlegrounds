@@ -1,4 +1,4 @@
-﻿using Unity.Ricochet.Game;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace Unity.Ricochet.Gameplay
@@ -10,12 +10,7 @@ namespace Unity.Ricochet.Gameplay
 
         private float shakeDelay = 0.03f;
         private float lastShakeTime = float.MinValue;
-        private Timer shakeTimer;
-
-        private void Awake()
-        {
-            InitTimers();
-        }
+        private bool isShaking = false;
 
         private void Update()
         {
@@ -25,15 +20,8 @@ namespace Unity.Ricochet.Gameplay
 
         public void ToggleShake(float shakeTime)
         {
-            shakeTimer.StartTimer(shakeTime);
-        }
-
-        private void InitTimers()
-        {
-            if (shakeTimer == null)
-            {
-                shakeTimer = gameObject.AddComponent<Timer>();
-            }
+            isShaking = true;
+            StartCoroutine(WaitShakeFinish(shakeTime));
         }
 
         private void TrackObject()
@@ -43,7 +31,7 @@ namespace Unity.Ricochet.Gameplay
 
         private void HandleShake()
         {
-            if (!shakeTimer.isActive)
+            if (!isShaking)
             {
                 return;
             }
@@ -56,6 +44,12 @@ namespace Unity.Ricochet.Gameplay
                 targetCamera.transform.Translate(shakePosition);
                 lastShakeTime = Time.time;
             }
+        }
+
+        private IEnumerator WaitShakeFinish(float shakeTime)
+        {
+            yield return new WaitForSeconds(shakeTime);
+            isShaking = false;
         }
     }
 }

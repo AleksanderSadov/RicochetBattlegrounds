@@ -1,4 +1,5 @@
-﻿using Unity.Ricochet.Game;
+﻿using System.Collections;
+using Unity.Ricochet.Game;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,21 +15,19 @@ namespace Unity.Ricochet.Gameplay
         public Animator animator;
         public UnityAction<PlayerWeaponType> OnWeaponChanged;
         public bool isAimActive = false;
+        public bool isAttacking = false;
 
         [SerializeField] private GameCamera playerCamera;
 
         private Rigidbody myRigidBody;
         private int hashSpeed;
-        private float attackTime = 0.4f;
+        private float attackTime;
         private PlayerWeaponType currentWeapon = PlayerWeaponType.NULL;
-        private Timer attackTimer;
         private Damageable damageable;
         private ProjectileRicochetLine ricochetSense;
         
         private void Awake()
         {
-            InitTimers();
-
             ActorsManager actorsManager = FindObjectOfType<ActorsManager>();
             if (actorsManager != null)
             {
@@ -43,7 +42,6 @@ namespace Unity.Ricochet.Gameplay
             damageable.OnDie += OnDie;
             myRigidBody = GetComponent<Rigidbody>();
             hashSpeed = Animator.StringToHash("Speed");
-            attackTimer.StartTimer(0.1f);
             SetWeapon(PlayerWeaponType.PISTOL);
         }
 
@@ -53,14 +51,6 @@ namespace Unity.Ricochet.Gameplay
             SetAnimatorSpeed();
             HandleInput();
             HandleAim();
-        }
-
-        private void InitTimers()
-        {
-            if (attackTimer == null)
-            {
-                attackTimer = gameObject.AddComponent<Timer>();
-            }
         }
 
         private void HideCursor()
@@ -111,7 +101,7 @@ namespace Unity.Ricochet.Gameplay
                 return;
             }
 
-            if (Input.GetMouseButtonDown(0) && attackTimer.isFinished)
+            if (Input.GetMouseButtonDown(0) && !isAttacking)
             {
                 Attack();
             }
@@ -131,6 +121,8 @@ namespace Unity.Ricochet.Gameplay
 
         private void Attack()
         {
+            isAttacking = true;
+
             switch (currentWeapon)
             {
                 case PlayerWeaponType.KNIFE:
@@ -142,9 +134,7 @@ namespace Unity.Ricochet.Gameplay
             }
 
             animator.SetBool("Attack", true);
-            CancelInvoke("AttackOver");
-            Invoke("AttackOver", attackTime);
-            attackTimer.StartTimer(attackTime);
+            StartCoroutine(WaitAttackFinish());
         }
 
         private void FireBullet()
@@ -198,8 +188,10 @@ namespace Unity.Ricochet.Gameplay
             }
         }
 
-        private void AttackOver()
+        private IEnumerator WaitAttackFinish()
         {
+            yield return new WaitForSeconds(attackTime);
+            isAttacking = false;
             animator.SetBool("Attack", false);
         }
 
