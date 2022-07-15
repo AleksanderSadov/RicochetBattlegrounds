@@ -37,7 +37,6 @@ namespace Unity.Ricochet.AI
         private EnemySensorDanger sensorDanger;
         private Damageable damageable;
         private EnemyManager enemyManager;
-        private ScoreManager scoreManager;
         private int hashSpeed;
 
         private void Start()
@@ -48,7 +47,6 @@ namespace Unity.Ricochet.AI
             sensorDanger = GetComponentInChildren<EnemySensorDanger>();
             sensorDanger.onDangerDetected += OnDangerDetected;
             enemyManager = FindObjectOfType<EnemyManager>();
-            scoreManager = FindObjectOfType<ScoreManager>();
             damageable = GetComponent<Damageable>();
             damageable.OnDie += OnDie;
             hashSpeed = Animator.StringToHash("Speed");
@@ -154,7 +152,6 @@ namespace Unity.Ricochet.AI
             navMeshAgent.velocity = Vector3.zero;
             animator.SetBool("Dead", true);
             animator.transform.parent = null;
-            scoreManager.AddScore(100);
             enemyManager.EnemyDied();
             Destroy(gameObject);
         }

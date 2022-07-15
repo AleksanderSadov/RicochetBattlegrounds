@@ -6,18 +6,18 @@ namespace Unity.Ricochet.UI
 {
     public class ScoreCounter : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI scoreText;
-
-        private ScoreManager scoreManager;
-
-        private void Start()
-        {
-            scoreManager = FindObjectOfType<ScoreManager>();
-        }
+        [SerializeField] private TextMeshProUGUI playerScoreText;
+        [SerializeField] private TextMeshProUGUI enemyScoreText;
 
         private void Update()
         {
-            scoreText.text = scoreManager.currentScore.ToString();
+            if (ScoreManager.Instance == null)
+            {
+                return;
+            }
+
+            playerScoreText.text = ScoreManager.Instance.playerScore.ToString();
+            enemyScoreText.text = ScoreManager.Instance.enemyScore.ToString();
         }
     }
 }
