@@ -7,6 +7,8 @@ namespace Unity.Ricochet.Game
     {
         public UnityAction OnDie;
 
+        public AudioClip deathAudioClip;
+
         private GameManager gameManager;
 
         private void Start()
@@ -22,6 +24,11 @@ namespace Unity.Ricochet.Game
             }
 
             OnDie?.Invoke();
+
+            if (deathAudioClip != null)
+            {
+                AudioSource.PlayClipAtPoint(deathAudioClip, transform.position, 0.5f);
+            }
         }
     }
 }

@@ -420,6 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80daab9651be4aa4887a7f2e5d91e611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathAudioClip: {fileID: 8300000, guid: cf514d17ae2b320459a72ff57dacdb7d, type: 3}
 --- !u!114 &5760064969126012154
 MonoBehaviour:
   m_ObjectHideFlags: 0
