@@ -295,7 +295,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400254, guid: 6f6323d58f2031e4ebc65bde7dda8f77, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 19.74
       objectReference: {fileID: 0}
     - target: {fileID: 400254, guid: 6f6323d58f2031e4ebc65bde7dda8f77, type: 3}
       propertyPath: m_LocalPosition.y
@@ -303,7 +303,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400254, guid: 6f6323d58f2031e4ebc65bde7dda8f77, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -6.44
       objectReference: {fileID: 0}
     - target: {fileID: 400254, guid: 6f6323d58f2031e4ebc65bde7dda8f77, type: 3}
       propertyPath: m_LocalRotation.w
@@ -332,6 +332,15 @@ PrefabInstance:
     - target: {fileID: 400254, guid: 6f6323d58f2031e4ebc65bde7dda8f77, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11467802, guid: 6f6323d58f2031e4ebc65bde7dda8f77, type: 3}
+      propertyPath: delayBetweenEvades
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093266705568205050, guid: 6f6323d58f2031e4ebc65bde7dda8f77,
+        type: 3}
+      propertyPath: dangerCheckProximity
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f6323d58f2031e4ebc65bde7dda8f77, type: 3}

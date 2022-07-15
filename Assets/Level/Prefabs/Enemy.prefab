@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delayBetweenAttacks: 0.5
-  delayBetweenEvades: 1
+  delayBetweenEvades: 0.5
   evadeDistance: 10
   evadeDuration: 0.5
   isEvading: 0
@@ -192,7 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8458949a18e363c49b8b8104ab25d644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dangerCheckProximity: 20
+  dangerCheckProximity: 30
   isDangerDetected: 0
   detectedBullet: {fileID: 0}
 --- !u!82 &-2312518190851999793
