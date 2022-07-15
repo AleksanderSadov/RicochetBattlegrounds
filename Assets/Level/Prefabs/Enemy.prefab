@@ -302,11 +302,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d06630d5b32d541b366506d571ddd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shotsList:
+  clipsList:
+  - {fileID: 8300000, guid: d3247579c549643a5b3a95f9224eaf3c, type: 3}
   - {fileID: 8300000, guid: 1b766da7cc2d648aa84e36cb5fe8abcb, type: 3}
   - {fileID: 8300000, guid: 65201ddabb4144f6a8fb9480120b7656, type: 3}
-  - {fileID: 8300000, guid: d3247579c549643a5b3a95f9224eaf3c, type: 3}
-  shotSource: {fileID: -2312518190851999793}
+  audioSource: {fileID: -2312518190851999793}
 --- !u!1 &162682
 GameObject:
   m_ObjectHideFlags: 0

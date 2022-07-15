@@ -38,11 +38,11 @@ namespace Unity.Ricochet.AI
         private Damageable damageable;
         private EnemyManager enemyManager;
         private int hashSpeed;
-        private GunShotsAudio gunShotsAudio;
+        private ClipAudio clipAudio;
 
         private void Start()
         {
-            gunShotsAudio = GetComponent<GunShotsAudio>();
+            clipAudio = GetComponent<ClipAudio>();
             navMeshAgent = GetComponent<NavMeshAgent>();
             sensorFindPlayer = GetComponentInChildren<EnemySensorFindPlayer>();
             sensorSightFov = GetComponentInChildren<EnemySensorSightFov>();
@@ -91,7 +91,7 @@ namespace Unity.Ricochet.AI
                 return;
             }
 
-            gunShotsAudio.PlayGunShot();
+            clipAudio.PlayRandomClipOnce();
             animator.SetBool("Attack", true);
             GameObject bullet = Instantiate(projectilePrefab, weaponPivot.position, weaponPivot.rotation);
             bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);

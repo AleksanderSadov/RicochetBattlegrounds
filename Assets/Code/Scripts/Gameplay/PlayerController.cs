@@ -25,7 +25,7 @@ namespace Unity.Ricochet.Gameplay
         private PlayerWeaponType currentWeapon = PlayerWeaponType.NULL;
         private Damageable damageable;
         private ProjectileRicochetLine ricochetSense;
-        private GunShotsAudio gunShotsAudio;
+        private ClipAudio ClipAudio;
         
         private void Awake()
         {
@@ -38,7 +38,7 @@ namespace Unity.Ricochet.Gameplay
 
         private void Start()
         {
-            gunShotsAudio = GetComponent<GunShotsAudio>();
+            ClipAudio = GetComponent<ClipAudio>();
             ricochetSense = GetComponent<ProjectileRicochetLine>();
             damageable = GetComponent<Damageable>();
             damageable.OnDie += OnDie;
@@ -141,7 +141,7 @@ namespace Unity.Ricochet.Gameplay
 
         private void FireBullet()
         {
-            gunShotsAudio.PlayGunShot();
+            ClipAudio.PlayRandomClipOnce();
             GameObject bullet = Instantiate(projectilePrefab, gunPivot.position, gunPivot.rotation);
             bullet.transform.LookAt(mousePointer.transform);
 

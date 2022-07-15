@@ -7,11 +7,14 @@ namespace Unity.Ricochet.Gameplay
     {
         [SerializeField] private float speed = 0.1f;
         [SerializeField] private float safeCollisionDelay = 0.1f;
+
+        private ClipAudio clipAudio;
         
         private float initializationTime;
 
         private void Start()
         {
+            clipAudio = GetComponent<ClipAudio>();
             initializationTime = Time.timeSinceLevelLoad;
         }
 
@@ -29,14 +32,16 @@ namespace Unity.Ricochet.Gameplay
                 return;
             }
 
-            Vector3 deflect = Vector3.Reflect(transform.forward, collision.contacts[0].normal);
-            transform.forward = deflect;
-
             if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy"))
             {
                 collision.gameObject.GetComponent<Damageable>().Kill();
                 Destroy(gameObject);
+                return;
             }
+
+            Vector3 deflect = Vector3.Reflect(transform.forward, collision.contacts[0].normal);
+            transform.forward = deflect;
+            clipAudio.PlayRandomClipAtPointOnce(collision.contacts[0].point);
         }
     }
 }
