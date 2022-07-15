@@ -25,7 +25,8 @@ namespace Unity.Ricochet.Gameplay
         private PlayerWeaponType currentWeapon = PlayerWeaponType.NULL;
         private Damageable damageable;
         private ProjectileRicochetLine ricochetSense;
-        private ClipAudio ClipAudio;
+        private ClipAudio footstepsAudio;
+        private ClipAudio gunAudio;
         
         private void Awake()
         {
@@ -38,19 +39,21 @@ namespace Unity.Ricochet.Gameplay
 
         private void Start()
         {
-            ClipAudio = GetComponent<ClipAudio>();
+            footstepsAudio = GetComponent<ClipAudio>();
+            gunAudio = gunPivot.GetComponent<ClipAudio>();
             ricochetSense = GetComponent<ProjectileRicochetLine>();
             damageable = GetComponent<Damageable>();
             damageable.OnDie += OnDie;
             myRigidBody = GetComponent<Rigidbody>();
             hashSpeed = Animator.StringToHash("Speed");
             SetWeapon(PlayerWeaponType.PISTOL);
+            footstepsAudio.PlayRandomclipsOnRepeat();
         }
 
         private void Update()
         {
             HideCursor();
-            SetAnimatorSpeed();
+            HandleSpeed();
             HandleInput();
             HandleAim();
         }
@@ -63,9 +66,20 @@ namespace Unity.Ricochet.Gameplay
             }
         }
 
-        private void SetAnimatorSpeed()
+        private void HandleSpeed()
         {
+            float speed = myRigidBody.velocity.magnitude;
+
             animator.SetFloat(hashSpeed, myRigidBody.velocity.magnitude);
+
+            if (speed > 0)
+            {
+                footstepsAudio.SetVolume(0.25f);
+            }
+            else
+            {
+                footstepsAudio.SetVolume(0f);
+            }
         }
 
         private void HandleInput()
@@ -141,7 +155,7 @@ namespace Unity.Ricochet.Gameplay
 
         private void FireBullet()
         {
-            ClipAudio.PlayRandomClipOnce();
+            gunAudio.PlayRandomClipOnce();
             GameObject bullet = Instantiate(projectilePrefab, gunPivot.position, gunPivot.rotation);
             bullet.transform.LookAt(mousePointer.transform);
 

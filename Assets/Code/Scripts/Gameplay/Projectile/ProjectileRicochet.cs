@@ -41,7 +41,7 @@ namespace Unity.Ricochet.Gameplay
 
             Vector3 deflect = Vector3.Reflect(transform.forward, collision.contacts[0].normal);
             transform.forward = deflect;
-            clipAudio.PlayRandomClipAtPointOnce(collision.contacts[0].point);
+            clipAudio.PlayRandomClipAtPointOnce(collision.contacts[0].point, 0.5f);
         }
     }
 }

@@ -38,11 +38,13 @@ namespace Unity.Ricochet.AI
         private Damageable damageable;
         private EnemyManager enemyManager;
         private int hashSpeed;
-        private ClipAudio clipAudio;
+        private ClipAudio footstepsAudio;
+        private ClipAudio gunAudio;
 
         private void Start()
         {
-            clipAudio = GetComponent<ClipAudio>();
+            footstepsAudio = GetComponent<ClipAudio>();
+            gunAudio = weaponPivot.GetComponent<ClipAudio>();
             navMeshAgent = GetComponent<NavMeshAgent>();
             sensorFindPlayer = GetComponentInChildren<EnemySensorFindPlayer>();
             sensorSightFov = GetComponentInChildren<EnemySensorSightFov>();
@@ -58,7 +60,18 @@ namespace Unity.Ricochet.AI
 
         private void Update()
         {
+            float speed = navMeshAgent.velocity.magnitude;
+
             animator.SetFloat(hashSpeed, navMeshAgent.velocity.magnitude);
+
+            if (speed > 0)
+            {
+                footstepsAudio.SetVolume(0.25f);
+            }
+            else
+            {
+                footstepsAudio.SetVolume(0f);
+            }
         }
 
         public void SetNavDestination(Vector3 destination)
@@ -91,7 +104,7 @@ namespace Unity.Ricochet.AI
                 return;
             }
 
-            clipAudio.PlayRandomClipOnce();
+            gunAudio.PlayRandomClipOnce();
             animator.SetBool("Attack", true);
             GameObject bullet = Instantiate(projectilePrefab, weaponPivot.position, weaponPivot.rotation);
             bullet.transform.Rotate(0, Random.Range(-7.5f, 7.5f), 0);
