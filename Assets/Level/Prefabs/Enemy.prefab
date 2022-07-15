@@ -56,7 +56,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delayBetweenAttacks: 0.5
   delayBetweenEvades: 1
-  orientationSpeed: 10
   evadeDistance: 10
   evadeDuration: 0.5
   isEvading: 0
@@ -176,7 +175,7 @@ MonoBehaviour:
   isSeeingTarget: 0
   isTargetInAttackRange: 0
   isTargetInAttackAngle: 0
-  showFov: 1
+  showFov: 0
   fovMaterial: {fileID: 2100000, guid: 3a003d3c913e5d2498da8502b8a57dd3, type: 2}
 --- !u!114 &1093266705568205050
 MonoBehaviour:

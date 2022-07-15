@@ -272,6 +272,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 181756, guid: 557ed858a06543346b65755da98b1aee, type: 3}
   animator: {fileID: 5760064969122021939}
   isAimActive: 0
+  isAttacking: 0
   playerCamera: {fileID: 0}
 --- !u!54 &5760064969117837001
 Rigidbody:
