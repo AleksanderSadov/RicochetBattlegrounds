@@ -10,7 +10,6 @@ namespace Unity.Ricochet.AI
     {
         public float delayBetweenAttacks = 0.5f;
         public float delayBetweenEvades = 1.0f;
-        public float orientationSpeed = 10f;
         public float evadeDistance = 10f;
         public float evadeDuration = 0.5f;
 
@@ -81,7 +80,7 @@ namespace Unity.Ricochet.AI
             if (lookDirection.sqrMagnitude != 0f)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * orientationSpeed);
+                transform.rotation = targetRotation;
             }
         }
 
@@ -107,6 +106,35 @@ namespace Unity.Ricochet.AI
 
             lastTimeEvaded = Time.time;
             StartCoroutine(WaitEvadeDuration());
+        }
+
+        public void TryNewAttackPosition()
+        {
+            if (!HasReachedDestination())
+            {
+                return;
+            }
+
+            float detectionRange = sensorSightFov.detectionRange;
+            Vector3 randomDirection = new Vector3(Random.Range(detectionRange / 2, detectionRange), transform.position.y, Random.Range(detectionRange / 2, detectionRange));
+            float randomSign = Random.Range(0f, 1f) >= 0.5f ? 1f : -1f;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(detectedTarget.transform.position + randomDirection * randomSign, out hit, sensorSightFov.detectionRange, 1 << NavMesh.GetAreaFromName("Walkable")))
+            {
+                SetNavDestination(hit.position);
+            }
+        }
+
+        private bool HasReachedDestination()
+        {
+            if (!navMeshAgent.pathPending
+                && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance
+                && (!navMeshAgent.hasPath || navMeshAgent.velocity.sqrMagnitude == 0f))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void OnDangerDetected()

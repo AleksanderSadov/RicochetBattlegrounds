@@ -49,8 +49,6 @@ namespace Unity.Ricochet.AI
                         enemyController.animator.SetBool("Attack", false);
                     }
                     break;
-                case AIState.Evade:
-                    break;
             }
         }
 
@@ -64,6 +62,7 @@ namespace Unity.Ricochet.AI
                 case AIState.Attack:
                     enemyController.OrientTowards(enemyController.detectedTarget.transform.position);
                     enemyController.TryAttack();
+                    enemyController.TryNewAttackPosition();
                     break;
                 case AIState.Evade:
                     if (!enemyController.isEvading && enemyController.detectedBullet)
