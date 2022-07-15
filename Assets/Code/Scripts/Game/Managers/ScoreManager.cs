@@ -9,6 +9,8 @@ namespace Unity.Ricochet.Game
 
         public static ScoreManager Instance;
 
+        private GameManager gameManager;
+
         private void Awake()
         {
             if (Instance != null)
@@ -23,17 +25,28 @@ namespace Unity.Ricochet.Game
 
         private void Start()
         {
+            gameManager = FindObjectOfType<GameManager>();
             EventManager.AddListener<PlayerDeathEvent>(OnPlayerDeath);
             EventManager.AddListener<AllEnemiesKilled>(OnAllEnemiesKilled);
         }
 
         public void AddPlayerScore()
         {
+            if (gameManager.isGameOver)
+            {
+                return;
+            }
+
             playerScore++;
         }
 
         public void AddEnemyScore()
         {
+            if (gameManager.isGameOver)
+            {
+                return;
+            }
+
             enemyScore++;
         }
 
