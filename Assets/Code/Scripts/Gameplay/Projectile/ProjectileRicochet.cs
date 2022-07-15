@@ -7,7 +7,7 @@ namespace Unity.Ricochet.Gameplay
     {
         [SerializeField] private float lifeTime = 3.0f;
         [SerializeField] private float speed = 0.1f;
-        [SerializeField] private float playerSafeCollisionTime = 0.1f;
+        [SerializeField] private float safeCollisionDelay = 0.1f;
         
         private float initializationTime;
 
@@ -25,7 +25,7 @@ namespace Unity.Ricochet.Gameplay
         private void OnCollisionEnter(Collision collision)
         {
             float bulletAliveTime = Time.timeSinceLevelLoad - initializationTime;
-            if (collision.gameObject.CompareTag("Player") && bulletAliveTime < playerSafeCollisionTime)
+            if ((collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy")) && bulletAliveTime < safeCollisionDelay)
             {
                 return;
             }
