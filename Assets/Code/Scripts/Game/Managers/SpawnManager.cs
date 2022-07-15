@@ -11,23 +11,16 @@ namespace Unity.Ricochet.Game
         [Tooltip("Spawner default location")]
         public GameObject spawnDefaultPosition;
 
-        private ActorsManager actorsManager;
+        public GameObject player;
+        public GameObject enemy;
 
         private void Start()
         {
-            actorsManager = FindObjectOfType<ActorsManager>();
-            RandomSpawn();
+            WarpToRandomSpawnPosition(player);
+            WarpToRandomSpawnPosition(enemy);
         }
 
-        private void RandomSpawn()
-        {
-            foreach (Actor actor in actorsManager.actors)
-            {
-                MoveToRandomSpawnPosition(actor.gameObject);
-            }
-        }
-
-        private void MoveToRandomSpawnPosition(GameObject entity)
+        private void WarpToRandomSpawnPosition(GameObject entity)
         {
             Vector3 randomSpawnPosition;
             if (FindRandomSpawnPosition(spawnDefaultPosition.transform.position, spawnRadius, out randomSpawnPosition))
