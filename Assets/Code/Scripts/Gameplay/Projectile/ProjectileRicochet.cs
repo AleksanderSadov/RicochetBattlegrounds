@@ -23,7 +23,8 @@ namespace Unity.Ricochet.Gameplay
         private void OnCollisionEnter(Collision collision)
         {
             float bulletAliveTime = Time.timeSinceLevelLoad - initializationTime;
-            if ((collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy")) && bulletAliveTime < safeCollisionDelay)
+            if (
+                (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy")) && bulletAliveTime < safeCollisionDelay)
             {
                 return;
             }

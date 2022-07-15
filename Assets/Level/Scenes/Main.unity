@@ -333,20 +333,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11467802, guid: 6f6323d58f2031e4ebc65bde7dda8f77, type: 3}
-      propertyPath: orientationSpeed
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 6200466124196585805, guid: 6f6323d58f2031e4ebc65bde7dda8f77,
-        type: 3}
-      propertyPath: showFov
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6200466124196585805, guid: 6f6323d58f2031e4ebc65bde7dda8f77,
-        type: 3}
-      propertyPath: hitTestMask.m_Bits
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f6323d58f2031e4ebc65bde7dda8f77, type: 3}
 --- !u!1001 &148794929
